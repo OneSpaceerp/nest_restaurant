@@ -1,0 +1,39 @@
+{
+ "content": null,
+ "creation": "2026-10-27 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "",
+ "idx": 0,
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Service",
+ "name": "nest-restaurant",
+ "owner": "Administrator",
+ "page_name": "nest-restaurant",
+ "roles": [
+  {
+   "role": "Nest Restaurant Cashier"
+  },
+  {
+   "role": "Nest Restaurant Waiter"
+  },
+  {
+   "role": "Nest Restaurant Kitchen"
+  },
+  {
+   "role": "Nest Restaurant Supervisor"
+  },
+  {
+   "role": "Nest Restaurant Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Nest Restaurant"
+}

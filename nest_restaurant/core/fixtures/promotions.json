@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "precision": 2,
+  "cases": [
+    {
+      "name": "percent off a group",
+      "at": "2026-10-27T10:00:00",
+      "lines": [
+        {"line_id": "a", "item_code": "TEA", "item_group": "Drinks", "qty": "2", "rate": "10.00"},
+        {"line_id": "b", "item_code": "CAKE", "item_group": "Bakery", "qty": "1", "rate": "15.00"}
+      ],
+      "promotions": [{"name": "P-DRINKS10", "kind": "percent", "value": "10", "applies_to": {"item_groups": ["Drinks"]}}],
+      "expect": {"line_discounts": {"a": "2.00"}, "total_discount": "2.00"}
+    },
+    {
+      "name": "buy 2 get 1 free gives the cheapest unit",
+      "at": "2026-10-27T10:00:00",
+      "lines": [
+        {"line_id": "a", "item_code": "SOCK-R", "item_group": "Socks", "qty": "2", "rate": "8.00"},
+        {"line_id": "b", "item_code": "SOCK-B", "item_group": "Socks", "qty": "1", "rate": "6.00"}
+      ],
+      "promotions": [{"name": "B2G1", "kind": "bxgy", "buy_qty": 2, "get_qty": 1, "applies_to": {"item_groups": ["Socks"]}}],
+      "expect": {"line_discounts": {"b": "6.00"}, "total_discount": "6.00"}
+    },
+    {
+      "name": "spend and save allocates exactly",
+      "at": "2026-10-27T10:00:00",
+      "lines": [
+        {"line_id": "a", "item_code": "X", "qty": "1", "rate": "33.33"},
+        {"line_id": "b", "item_code": "Y", "qty": "1", "rate": "33.33"},
+        {"line_id": "c", "item_code": "Z", "qty": "1", "rate": "33.34"}
+      ],
+      "promotions": [{"name": "SPEND100", "kind": "spend_save", "threshold": "100", "discount_amount": "10"}],
+      "expect": {"line_discounts": {"a": "3.33", "b": "3.33", "c": "3.34"}, "total_discount": "10.00"}
+    },
+    {
+      "name": "bundle price",
+      "at": "2026-10-27T10:00:00",
+      "lines": [
+        {"line_id": "a", "item_code": "BURGER", "qty": "1", "rate": "60.00"},
+        {"line_id": "b", "item_code": "FRIES", "qty": "1", "rate": "25.00"},
+        {"line_id": "c", "item_code": "COLA", "qty": "2", "rate": "15.00"}
+      ],
+      "promotions": [{"name": "MEAL", "kind": "bundle", "bundle_price": "85.00",
+        "bundle_items": [{"item_code": "BURGER", "qty": 1}, {"item_code": "FRIES", "qty": 1}, {"item_code": "COLA", "qty": 1}]}],
+      "expect": {"line_discounts": {"a": "9.00", "b": "3.75", "c": "2.25"}, "total_discount": "15.00"}
+    },
+    {
+      "name": "exclusive beats others on the same line",
+      "at": "2026-10-27T10:00:00",
+      "lines": [{"line_id": "a", "item_code": "TV", "item_group": "Electronics", "qty": "1", "rate": "1000.00"}],
+      "promotions": [
+        {"name": "GENERAL5", "kind": "percent", "value": "5", "priority": 1},
+        {"name": "TVDEAL", "kind": "fixed_price", "value": "900.00", "exclusive": true, "priority": 50, "applies_to": {"items": ["TV"]}}
+      ],
+      "expect": {"line_discounts": {"a": "100.00"}, "total_discount": "100.00"}
+    },
+    {
+      "name": "non-stackable takes one, stackable adds",
+      "at": "2026-10-27T10:00:00",
+      "lines": [{"line_id": "a", "item_code": "SHIRT", "qty": "1", "rate": "100.00"}],
+      "promotions": [
+        {"name": "A10", "kind": "percent", "value": "10", "priority": 1},
+        {"name": "B20", "kind": "percent", "value": "20", "priority": 2},
+        {"name": "MEMBER5", "kind": "amount", "value": "5", "stackable": true, "priority": 3}
+      ],
+      "expect": {"line_discounts": {"a": "15.00"}, "total_discount": "15.00"}
+    },
+    {
+      "name": "happy hour overnight window and coupon",
+      "at": "2026-10-27T23:30:00",
+      "coupons": ["late"],
+      "lines": [{"line_id": "a", "item_code": "BEER", "qty": "2", "rate": "20.00"}],
+      "promotions": [
+        {"name": "HH", "kind": "amount", "value": "5", "time_from": "22:00", "time_to": "02:00", "stackable": true},
+        {"name": "LATE", "kind": "percent", "value": "10", "coupon_code": "LATE"},
+        {"name": "MORNING", "kind": "percent", "value": "50", "time_from": "06:00", "time_to": "11:00"}
+      ],
+      "expect": {"line_discounts": {"a": "14.00"}, "total_discount": "14.00"}
+    },
+    {
+      "name": "discount never exceeds line value",
+      "at": "2026-10-27T10:00:00",
+      "lines": [{"line_id": "a", "item_code": "PEN", "qty": "1", "rate": "3.00"}],
+      "promotions": [
+        {"name": "AMT5", "kind": "amount", "value": "5"},
+        {"name": "PCT50", "kind": "percent", "value": "50", "stackable": true}
+      ],
+      "expect": {"line_discounts": {"a": "3.00"}, "total_discount": "3.00"}
+    }
+  ]
+}

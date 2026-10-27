@@ -1,0 +1,171 @@
+/* Nest design tokens. Global → alias layers; components use aliases only.
+   Scoped to .nest-root so the same CSS is safe inside Frappe Desk and in the standalone PWAs. */
+
+.nest-root {
+  /* ---- global palette (from the supplied marks) ---- */
+  --nest-yellow-300: #ffe88f;
+  --nest-yellow-400: #ffde59; /* POS tile */
+  --nest-yellow-500: #f5c92e;
+  --nest-yellow-800: #7a5c00; /* yellow-family text on light, 6.4:1 on white */
+  --nest-ink-950: #141313;
+  --nest-ink-900: #1e1d1d; /* restaurant tile */
+  --nest-ink-800: #282727;
+  --nest-ink-700: #3b3938;
+  --nest-ink-500: #6a6764; /* 5.6:1 on white */
+  --nest-ink-300: #b9b6b2;
+  --nest-ink-200: #dcdad7;
+  --nest-ink-100: #ecebe9;
+  --nest-paper: #f4f5f6;
+  --nest-white: #ffffff;
+  --nest-green-700: #1a7f4b;
+  --nest-green-100: #def3e7;
+  --nest-red-700: #c0362c;
+  --nest-red-100: #fbe3e0;
+  --nest-amber-700: #a15c00;
+  --nest-amber-100: #fdeccc;
+  --nest-blue-700: #1f6fb2;
+  --nest-blue-100: #dcebf7;
+
+  /* ---- alias: surfaces & text ---- */
+  --surface-page: var(--nest-paper);
+  --surface-card: var(--nest-white);
+  --surface-sunken: var(--nest-ink-100);
+  --surface-inverse: var(--nest-ink-900);
+  --surface-tape: var(--nest-white);
+  --text-strong: var(--nest-ink-900);
+  --text-body: var(--nest-ink-700);
+  --text-muted: var(--nest-ink-500);
+  --text-inverse: #f6f5f3;
+  --border-subtle: var(--nest-ink-200);
+  --border-strong: var(--nest-ink-300);
+
+  /* ---- alias: brand & actions ---- */
+  --action-primary-bg: var(--nest-ink-900);
+  --action-primary-fg: #ffffff;
+  --action-primary-hover: var(--nest-ink-700);
+  --brand-fill: var(--nest-yellow-400);
+  --brand-fill-strong: var(--nest-yellow-500);
+  --brand-on-fill: var(--nest-ink-900);
+  --brand-text: var(--nest-yellow-800);
+  --focus-ring: 0 0 0 2px var(--nest-white), 0 0 0 5px var(--nest-ink-900), 0 0 0 7px var(--nest-yellow-400);
+
+  /* ---- alias: status (always paired with a word or icon, never colour alone) ---- */
+  --ok-fg: var(--nest-green-700);
+  --ok-bg: var(--nest-green-100);
+  --danger-fg: var(--nest-red-700);
+  --danger-bg: var(--nest-red-100);
+  --warn-fg: var(--nest-amber-700);
+  --warn-bg: var(--nest-amber-100);
+  --info-fg: var(--nest-blue-700);
+  --info-bg: var(--nest-blue-100);
+
+  /* ---- type ---- */
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-xs: 0.75rem;   /* 12 */
+  --text-sm: 0.875rem;  /* 14 */
+  --text-md: 1rem;      /* 16 base */
+  --text-lg: 1.25rem;   /* 20 */
+  --text-xl: 1.5rem;    /* 24 */
+  --text-2xl: 2rem;     /* 32 */
+  --text-due: clamp(2rem, 1.4rem + 2vw, 2.75rem); /* amount-due plate */
+  --leading-tight: 1.2;
+  --leading-body: 1.5;
+
+  /* ---- space (4px base) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* ---- shape & depth ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-raised: 0 1px 2px rgb(20 19 19 / 0.06), 0 4px 12px rgb(20 19 19 / 0.06);
+  --shadow-overlay: 0 12px 40px rgb(20 19 19 / 0.22);
+  --touch: 44px;
+  --touch-lg: 56px;
+
+  /* ---- motion ---- */
+  --dur-fast: 120ms;
+  --dur-normal: 200ms;
+  --dur-moderate: 300ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 0.3);
+
+  /* ---- layout ---- */
+  --tape-width: clamp(320px, 30vw, 440px);
+  --rail-width: 200px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Dark: elevation by lighter surfaces, desaturated status colours, off-white text. */
+.nest-root[data-theme="dark"],
+.nest-root [data-theme="dark"] {
+  --surface-page: var(--nest-ink-950);
+  --surface-card: var(--nest-ink-900);
+  --surface-sunken: #0d0c0c;
+  --surface-inverse: #f6f5f3;
+  --surface-tape: var(--nest-ink-800);
+  --text-strong: #f2f1ee;
+  --text-body: #d9d7d3;
+  --text-muted: #a8a5a1;
+  --text-inverse: var(--nest-ink-900);
+  --border-subtle: #34322f;
+  --border-strong: #4a4744;
+  --action-primary-bg: var(--nest-yellow-400);
+  --action-primary-fg: var(--nest-ink-900);
+  --action-primary-hover: var(--nest-yellow-300);
+  --brand-text: var(--nest-yellow-400);
+  --focus-ring: 0 0 0 2px var(--nest-ink-950), 0 0 0 5px var(--nest-yellow-400);
+  --ok-fg: #6fd39e;
+  --ok-bg: #12301f;
+  --danger-fg: #ff8f84;
+  --danger-bg: #3a1714;
+  --warn-fg: #ffc266;
+  --warn-bg: #36260b;
+  --info-fg: #8cc4f2;
+  --info-bg: #0f2638;
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nest-root[data-theme="auto"] {
+    --surface-page: var(--nest-ink-950);
+    --surface-card: var(--nest-ink-900);
+    --surface-sunken: #0d0c0c;
+    --surface-tape: var(--nest-ink-800);
+    --text-strong: #f2f1ee;
+    --text-body: #d9d7d3;
+    --text-muted: #a8a5a1;
+    --border-subtle: #34322f;
+    --border-strong: #4a4744;
+    --action-primary-bg: var(--nest-yellow-400);
+    --action-primary-fg: var(--nest-ink-900);
+    --action-primary-hover: var(--nest-yellow-300);
+    --brand-text: var(--nest-yellow-400);
+    --focus-ring: 0 0 0 2px var(--nest-ink-950), 0 0 0 5px var(--nest-yellow-400);
+    --ok-fg: #6fd39e;
+    --ok-bg: #12301f;
+    --danger-fg: #ff8f84;
+    --danger-bg: #3a1714;
+    --warn-fg: #ffc266;
+    --warn-bg: #36260b;
+    --info-fg: #8cc4f2;
+    --info-bg: #0f2638;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nest-root {
+    --dur-fast: 1ms;
+    --dur-normal: 1ms;
+    --dur-moderate: 1ms;
+  }
+}

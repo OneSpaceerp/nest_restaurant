@@ -1,0 +1,38 @@
+{
+ "app": "nest_restaurant",
+ "creation": "2026-10-27 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 60,
+ "label": "Nest Restaurant",
+ "link": "/desk/nest-restaurant",
+ "link_type": "External",
+ "logo_url": "/assets/nest_restaurant/images/nest-restaurant-logo.png",
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "Nest Restaurant",
+ "owner": "Administrator",
+ "roles": [
+  {
+   "role": "Nest Restaurant Cashier"
+  },
+  {
+   "role": "Nest Restaurant Waiter"
+  },
+  {
+   "role": "Nest Restaurant Kitchen"
+  },
+  {
+   "role": "Nest Restaurant Supervisor"
+  },
+  {
+   "role": "Nest Restaurant Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "standard": 1
+}

@@ -1,0 +1,265 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "kind",
+  "disabled",
+  "priority",
+  "exclusive",
+  "stackable",
+  "cb_1",
+  "value",
+  "buy_qty",
+  "get_qty",
+  "get_discount_percent",
+  "threshold",
+  "discount_amount",
+  "repeat",
+  "bundle_price",
+  "sb_when",
+  "valid_from",
+  "valid_to",
+  "days_of_week",
+  "cb_2",
+  "time_from",
+  "time_to",
+  "coupon_code",
+  "customer_groups",
+  "profiles",
+  "min_qty",
+  "min_amount",
+  "max_applications",
+  "sb_scope",
+  "scope",
+  "bundle_items"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "kind",
+   "fieldtype": "Select",
+   "label": "Kind",
+   "options": "percent\namount\nfixed_price\nbxgy\nspend_save\nbundle",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Int",
+   "label": "Priority (lower first)",
+   "default": "100"
+  },
+  {
+   "fieldname": "exclusive",
+   "fieldtype": "Check",
+   "label": "Exclusive"
+  },
+  {
+   "fieldname": "stackable",
+   "fieldtype": "Check",
+   "label": "Stacks with others"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Float",
+   "label": "Value",
+   "description": "Percent, amount per unit, or fixed unit price"
+  },
+  {
+   "fieldname": "buy_qty",
+   "fieldtype": "Int",
+   "label": "Buy quantity",
+   "depends_on": "eval:doc.kind=='bxgy'"
+  },
+  {
+   "fieldname": "get_qty",
+   "fieldtype": "Int",
+   "label": "Get quantity",
+   "depends_on": "eval:doc.kind=='bxgy'"
+  },
+  {
+   "fieldname": "get_discount_percent",
+   "fieldtype": "Percent",
+   "label": "Discount on the get items",
+   "default": "100",
+   "depends_on": "eval:doc.kind=='bxgy'"
+  },
+  {
+   "fieldname": "threshold",
+   "fieldtype": "Currency",
+   "label": "Spend threshold",
+   "depends_on": "eval:doc.kind=='spend_save'"
+  },
+  {
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "label": "Save amount",
+   "depends_on": "eval:doc.kind=='spend_save'"
+  },
+  {
+   "fieldname": "repeat",
+   "fieldtype": "Check",
+   "label": "Repeat per threshold",
+   "depends_on": "eval:doc.kind=='spend_save'"
+  },
+  {
+   "fieldname": "bundle_price",
+   "fieldtype": "Currency",
+   "label": "Bundle price",
+   "depends_on": "eval:doc.kind=='bundle'"
+  },
+  {
+   "fieldname": "sb_when",
+   "fieldtype": "Section Break",
+   "label": "When and for whom"
+  },
+  {
+   "fieldname": "valid_from",
+   "fieldtype": "Date",
+   "label": "Valid from"
+  },
+  {
+   "fieldname": "valid_to",
+   "fieldtype": "Date",
+   "label": "Valid to"
+  },
+  {
+   "fieldname": "days_of_week",
+   "fieldtype": "Data",
+   "label": "Days of week",
+   "description": "Comma-separated 0-6, Monday is 0"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "time_from",
+   "fieldtype": "Time",
+   "label": "From time"
+  },
+  {
+   "fieldname": "time_to",
+   "fieldtype": "Time",
+   "label": "To time"
+  },
+  {
+   "fieldname": "coupon_code",
+   "fieldtype": "Data",
+   "label": "Coupon code",
+   "unique": 1
+  },
+  {
+   "fieldname": "customer_groups",
+   "fieldtype": "Small Text",
+   "label": "Customer groups",
+   "description": "One per line; empty means everyone"
+  },
+  {
+   "fieldname": "profiles",
+   "fieldtype": "Small Text",
+   "label": "POS Profiles",
+   "description": "One per line; empty means all"
+  },
+  {
+   "fieldname": "min_qty",
+   "fieldtype": "Float",
+   "label": "Minimum quantity"
+  },
+  {
+   "fieldname": "min_amount",
+   "fieldtype": "Currency",
+   "label": "Minimum amount"
+  },
+  {
+   "fieldname": "max_applications",
+   "fieldtype": "Int",
+   "label": "Maximum applications per sale"
+  },
+  {
+   "fieldname": "sb_scope",
+   "fieldtype": "Section Break",
+   "label": "Applies to"
+  },
+  {
+   "fieldname": "scope",
+   "fieldtype": "Table",
+   "label": "Scope",
+   "options": "Nest Restaurant Promotion Scope"
+  },
+  {
+   "fieldname": "bundle_items",
+   "fieldtype": "Table",
+   "label": "Bundle items",
+   "options": "Nest Restaurant Promotion Bundle Item",
+   "depends_on": "eval:doc.kind=='bundle'"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Menu",
+ "name": "Nest Restaurant Promotion",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Supervisor",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Nest Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "hash",
+ "naming_rule": "Random",
+ "track_changes": 1,
+ "title_field": "title",
+ "show_title_field_in_link": 1
+}

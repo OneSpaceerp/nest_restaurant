@@ -1,0 +1,199 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "register",
+  "display_name",
+  "display_name_ar",
+  "section",
+  "sequence",
+  "cb_1",
+  "sold_out",
+  "guest_visible",
+  "default_course",
+  "service_types",
+  "available_from",
+  "available_to",
+  "sb_detail",
+  "description",
+  "allergens",
+  "dietary",
+  "image",
+  "sb_mod",
+  "modifier_groups"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "register",
+   "fieldtype": "Link",
+   "label": "Register",
+   "options": "Nest Restaurant Register",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "display_name",
+   "fieldtype": "Data",
+   "label": "Name on menu",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "display_name_ar",
+   "fieldtype": "Data",
+   "label": "Arabic name"
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Data",
+   "label": "Menu section",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "sequence",
+   "fieldtype": "Int",
+   "label": "Order",
+   "default": "0"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sold_out",
+   "fieldtype": "Check",
+   "label": "Sold out",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "guest_visible",
+   "fieldtype": "Check",
+   "label": "Show on guest menu",
+   "default": "1"
+  },
+  {
+   "fieldname": "default_course",
+   "fieldtype": "Int",
+   "label": "Course",
+   "default": "1"
+  },
+  {
+   "fieldname": "service_types",
+   "fieldtype": "Data",
+   "label": "Service types",
+   "default": "Dine-in,Takeaway,Delivery"
+  },
+  {
+   "fieldname": "available_from",
+   "fieldtype": "Time",
+   "label": "Available from"
+  },
+  {
+   "fieldname": "available_to",
+   "fieldtype": "Time",
+   "label": "Available to"
+  },
+  {
+   "fieldname": "sb_detail",
+   "fieldtype": "Section Break",
+   "label": "Guest information"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "allergens",
+   "fieldtype": "Data",
+   "label": "Allergens",
+   "description": "Comma-separated, e.g. gluten, milk, nuts"
+  },
+  {
+   "fieldname": "dietary",
+   "fieldtype": "Data",
+   "label": "Dietary tags",
+   "description": "e.g. vegetarian, vegan, halal"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "sb_mod",
+   "fieldtype": "Section Break",
+   "label": "Options"
+  },
+  {
+   "fieldname": "modifier_groups",
+   "fieldtype": "Table",
+   "label": "Option groups",
+   "options": "Nest Restaurant Menu Item Modifier"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Menu",
+ "name": "Nest Restaurant Menu Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Nest Restaurant Waiter",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Nest Restaurant Kitchen",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:{register}-{item_code}",
+ "naming_rule": "Expression",
+ "track_changes": 1,
+ "title_field": "display_name",
+ "show_title_field_in_link": 1
+}

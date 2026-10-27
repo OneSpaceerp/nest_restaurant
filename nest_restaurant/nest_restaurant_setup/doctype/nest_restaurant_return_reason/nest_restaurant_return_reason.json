@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "reason",
+  "restock",
+  "needs_approval"
+ ],
+ "fields": [
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "restock",
+   "fieldtype": "Check",
+   "label": "Return items to stock",
+   "default": "1"
+  },
+  {
+   "fieldname": "needs_approval",
+   "fieldtype": "Check",
+   "label": "Needs manager approval",
+   "default": "0"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Setup",
+ "name": "Nest Restaurant Return Reason",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Supervisor",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Nest Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "field:reason",
+ "naming_rule": "By fieldname",
+ "track_changes": 1
+}

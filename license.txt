@@ -1,0 +1,5 @@
+Copyright (c) 2026 Nest Software Development (nsdLabs). All rights reserved.
+
+The licence under which Nest Restaurant will be distributed has not yet been decided by the publisher.
+Until it is, no rights are granted beyond those agreed in writing with Nest Software Development
+(info@nsd-eg.com). See docs/provenance.md in the Nest source tree for third-party components.

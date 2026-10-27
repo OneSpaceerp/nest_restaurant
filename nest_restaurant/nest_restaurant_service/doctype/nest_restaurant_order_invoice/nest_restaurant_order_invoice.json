@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "invoice_doctype",
+  "invoice",
+  "amount",
+  "split_label"
+ ],
+ "fields": [
+  {
+   "fieldname": "invoice_doctype",
+   "fieldtype": "Link",
+   "label": "Type",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice",
+   "fieldtype": "Dynamic Link",
+   "label": "Invoice",
+   "options": "invoice_doctype",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "split_label",
+   "fieldtype": "Data",
+   "label": "Part",
+   "read_only": 1,
+   "in_list_view": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Service",
+ "name": "Nest Restaurant Order Invoice",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

@@ -1,0 +1,10 @@
+{
+  "name": "nest_restaurant",
+  "private": true,
+  "description": "bench build delegates to frontend/",
+  "scripts": {
+    "postinstall": "cd frontend && npm install",
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  }
+}

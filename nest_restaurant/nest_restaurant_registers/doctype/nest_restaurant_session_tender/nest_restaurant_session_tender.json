@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "mode_of_payment",
+  "opening_amount",
+  "expected_amount",
+  "counted_amount",
+  "variance",
+  "denominations"
+ ],
+ "fields": [
+  {
+   "fieldname": "mode_of_payment",
+   "fieldtype": "Link",
+   "label": "Mode of payment",
+   "options": "Mode of Payment",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "opening_amount",
+   "fieldtype": "Currency",
+   "label": "Opening",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "expected_amount",
+   "fieldtype": "Currency",
+   "label": "Expected",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "counted_amount",
+   "fieldtype": "Currency",
+   "label": "Counted",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "variance",
+   "fieldtype": "Currency",
+   "label": "Variance",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "denominations",
+   "fieldtype": "JSON",
+   "label": "Denomination count",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Registers",
+ "name": "Nest Restaurant Session Tender",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

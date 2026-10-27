@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "scope_type",
+  "value"
+ ],
+ "fields": [
+  {
+   "fieldname": "scope_type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Item\nItem Group\nBrand",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Dynamic Link",
+   "label": "Value",
+   "options": "scope_type",
+   "reqd": 1,
+   "in_list_view": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Menu",
+ "name": "Nest Restaurant Promotion Scope",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

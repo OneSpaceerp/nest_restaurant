@@ -1,0 +1,295 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_pricing",
+  "pricing_authority",
+  "allow_offline_cash_sales",
+  "offline_max_hours",
+  "offline_max_sale_value",
+  "cb_pricing",
+  "variance_tolerance",
+  "cash_rounding_increment",
+  "allow_negative_stock_sales",
+  "sb_security",
+  "pin_max_attempts",
+  "pin_lock_minutes",
+  "approval_ttl_seconds",
+  "cb_security",
+  "signing_secret",
+  "sb_receipts",
+  "receipt_footer",
+  "public_receipt_links",
+  "receipt_link_hours",
+  "sb_restaurant",
+  "guest_ordering_mode",
+  "guest_session_minutes",
+  "free_table_on",
+  "cb_restaurant",
+  "service_charge_item",
+  "default_service_charge_percent",
+  "tip_item",
+  "sb_booking",
+  "booking_enabled",
+  "booking_opens",
+  "booking_closes",
+  "booking_slot_minutes",
+  "cb_booking",
+  "booking_stay_minutes",
+  "booking_online_seats",
+  "booking_max_party",
+  "booking_lead_minutes"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_pricing",
+   "fieldtype": "Section Break",
+   "label": "Pricing and checkout"
+  },
+  {
+   "fieldname": "pricing_authority",
+   "fieldtype": "Select",
+   "label": "Pricing authority",
+   "options": "native\nnest",
+   "default": "native",
+   "reqd": 1,
+   "description": "native: ERPNext Pricing Rules. nest: Nest promotions (Pricing Rules ignored on Nest sales)."
+  },
+  {
+   "fieldname": "allow_offline_cash_sales",
+   "fieldtype": "Check",
+   "label": "Allow offline cash sales",
+   "default": "1"
+  },
+  {
+   "fieldname": "offline_max_hours",
+   "fieldtype": "Int",
+   "label": "Offline sales allowed for (hours)",
+   "default": "12"
+  },
+  {
+   "fieldname": "offline_max_sale_value",
+   "fieldtype": "Currency",
+   "label": "Largest offline sale",
+   "description": "0 means no limit"
+  },
+  {
+   "fieldname": "cb_pricing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "variance_tolerance",
+   "fieldtype": "Currency",
+   "label": "Cash variance tolerance before a reason is required",
+   "default": "0"
+  },
+  {
+   "fieldname": "cash_rounding_increment",
+   "fieldtype": "Float",
+   "label": "Cash rounding increment",
+   "description": "e.g. 0.05; 0 disables"
+  },
+  {
+   "fieldname": "allow_negative_stock_sales",
+   "fieldtype": "Check",
+   "label": "Allow selling below zero stock",
+   "description": "Off by default. ERPNext's own Stock Settings still apply."
+  },
+  {
+   "fieldname": "sb_security",
+   "fieldtype": "Section Break",
+   "label": "Security"
+  },
+  {
+   "fieldname": "pin_max_attempts",
+   "fieldtype": "Int",
+   "label": "PIN attempts before lock",
+   "default": "5"
+  },
+  {
+   "fieldname": "pin_lock_minutes",
+   "fieldtype": "Int",
+   "label": "First lock length (minutes)",
+   "default": "5"
+  },
+  {
+   "fieldname": "approval_ttl_seconds",
+   "fieldtype": "Int",
+   "label": "Manager approval valid for (seconds)",
+   "default": "120"
+  },
+  {
+   "fieldname": "cb_security",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "signing_secret",
+   "fieldtype": "Password",
+   "label": "QR signing secret",
+   "read_only": 1,
+   "description": "Generated at install. Rotate to invalidate printed QR codes."
+  },
+  {
+   "fieldname": "sb_receipts",
+   "fieldtype": "Section Break",
+   "label": "Receipts"
+  },
+  {
+   "fieldname": "receipt_footer",
+   "fieldtype": "Small Text",
+   "label": "Receipt footer"
+  },
+  {
+   "fieldname": "public_receipt_links",
+   "fieldtype": "Check",
+   "label": "Allow expiring public receipt links",
+   "default": "0"
+  },
+  {
+   "fieldname": "receipt_link_hours",
+   "fieldtype": "Int",
+   "label": "Receipt link lifetime (hours)",
+   "default": "72"
+  },
+  {
+   "fieldname": "sb_restaurant",
+   "fieldtype": "Section Break",
+   "label": "Restaurant"
+  },
+  {
+   "fieldname": "guest_ordering_mode",
+   "fieldtype": "Select",
+   "label": "Guest orders",
+   "options": "Direct to kitchen\nCashier approves first\nOff",
+   "default": "Direct to kitchen",
+   "description": "Direct: an accepted guest order reaches the cashier and kitchen at once."
+  },
+  {
+   "fieldname": "guest_session_minutes",
+   "fieldtype": "Int",
+   "label": "Guest session idle timeout (minutes)",
+   "default": "90"
+  },
+  {
+   "fieldname": "free_table_on",
+   "fieldtype": "Select",
+   "label": "Free the table when",
+   "options": "Paid\nMarked clean",
+   "default": "Marked clean"
+  },
+  {
+   "fieldname": "cb_restaurant",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "service_charge_item",
+   "fieldtype": "Link",
+   "label": "Service charge item",
+   "options": "Item",
+   "description": "Non-stock item used for service charge lines"
+  },
+  {
+   "fieldname": "default_service_charge_percent",
+   "fieldtype": "Percent",
+   "label": "Default service charge"
+  },
+  {
+   "fieldname": "tip_item",
+   "fieldtype": "Link",
+   "label": "Tip item",
+   "options": "Item",
+   "description": "Non-stock item used for tips"
+  },
+  {
+   "fieldname": "sb_booking",
+   "fieldtype": "Section Break",
+   "label": "Online bookings"
+  },
+  {
+   "fieldname": "booking_enabled",
+   "fieldtype": "Check",
+   "label": "Take bookings online",
+   "default": "0"
+  },
+  {
+   "fieldname": "booking_opens",
+   "fieldtype": "Time",
+   "label": "First seating",
+   "default": "12:00:00"
+  },
+  {
+   "fieldname": "booking_closes",
+   "fieldtype": "Time",
+   "label": "Kitchen closes",
+   "default": "23:00:00"
+  },
+  {
+   "fieldname": "booking_slot_minutes",
+   "fieldtype": "Int",
+   "label": "Slot length (minutes)",
+   "default": "30"
+  },
+  {
+   "fieldname": "cb_booking",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "booking_stay_minutes",
+   "fieldtype": "Int",
+   "label": "Typical stay (minutes)",
+   "default": "90"
+  },
+  {
+   "fieldname": "booking_online_seats",
+   "fieldtype": "Int",
+   "label": "Seats offered online per slot",
+   "default": "40"
+  },
+  {
+   "fieldname": "booking_max_party",
+   "fieldtype": "Int",
+   "label": "Largest online party",
+   "default": "8"
+  },
+  {
+   "fieldname": "booking_lead_minutes",
+   "fieldtype": "Int",
+   "label": "Book at least (minutes ahead)",
+   "default": "60"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Setup",
+ "name": "Nest Restaurant Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Manager",
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "issingle": 1,
+ "track_changes": 1
+}

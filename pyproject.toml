@@ -1,0 +1,29 @@
+[project]
+name = "nest_restaurant"
+authors = [{ name = "Nest Software Development (nsdLabs)", email = "info@nsd-eg.com" }]
+description = "Restaurant and cafe point of sale for ERPNext"
+requires-python = ">=3.14,<3.15"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = []
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+# Minimum is the brief's required baseline; the upper bound is the next major, where nothing is claimed.
+[tool.bench.frappe-dependencies]
+frappe = ">=16.52.0,<17.0.0"
+erpnext = ">=16.52.0,<17.0.0"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "I", "UP", "B", "RUF"]
+ignore = ["E501", "B904", "W191", "E101", "E741", "RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"

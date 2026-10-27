@@ -1,0 +1,55 @@
+{
+ "app": "nest_restaurant",
+ "creation": "2026-10-27 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Dock",
+ "idx": 0,
+ "items": [
+  {
+   "added": 0,
+   "hidden": 0,
+   "icon": "nest-rest-service-soft",
+   "link_to": "Nest Restaurant Service",
+   "link_type": "Sidebar",
+   "title": "Service"
+  },
+  {
+   "added": 0,
+   "hidden": 0,
+   "icon": "nest-rest-floor-soft",
+   "link_to": "Nest Restaurant Floor",
+   "link_type": "Sidebar",
+   "title": "Floor"
+  },
+  {
+   "added": 0,
+   "hidden": 0,
+   "icon": "nest-rest-menu-soft",
+   "link_to": "Nest Restaurant Menu",
+   "link_type": "Sidebar",
+   "title": "Menu"
+  },
+  {
+   "added": 0,
+   "hidden": 0,
+   "icon": "nest-rest-registers-soft",
+   "link_to": "Nest Restaurant Registers",
+   "link_type": "Sidebar",
+   "title": "Registers"
+  },
+  {
+   "added": 0,
+   "hidden": 0,
+   "icon": "nest-rest-setup-soft",
+   "link_to": "Nest Restaurant Setup",
+   "link_type": "Sidebar",
+   "title": "Setup"
+  }
+ ],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "nest_restaurant",
+ "owner": "Administrator",
+ "standard": 1,
+ "user": ""
+}
