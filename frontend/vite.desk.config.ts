@@ -8,7 +8,7 @@ const APP = 'nest_restaurant'
 export default defineConfig({
   plugins: [vue({ template: { transformAssetUrls: { includeAbsolute: false } } })],
   resolve: { alias: { '@shared': fileURLToPath(new URL('./src/shared', import.meta.url)) } },
-  define: { 'process.env.NODE_ENV': JSON.stringify('production') },
+  define: { __NEST_ASSET_ROOT__: JSON.stringify(`/assets/${APP}/frontend/`), 'process.env.NODE_ENV': JSON.stringify('production') },
   build: {
     outDir: `../${APP}/public/desk`,
     emptyOutDir: true,

@@ -1,26 +1,15 @@
-// Camera barcode scanning with the platform BarcodeDetector (Chromium/Android, Safari 17.4+ on some
-// formats). Where it is missing we say so and offer the manual field — no silent failure, and no
-// third-party decoder shipped by default (see docs/hardware.md for adding one).
+// Camera barcode scanning. Decoding uses the platform BarcodeDetector where available and a bundled
+// WebAssembly ZXing decoder elsewhere (iOS Safari included) — see ./decoder. Where the camera itself
+// is unavailable we say so and offer the manual field — no silent failure.
 
+import { createDetector, type DecoderKind, type Detector } from './decoder'
 import { FrameDeduper, normaliseScan } from './scan'
 
 export type CameraState = 'idle' | 'starting' | 'running' | 'denied' | 'unsupported' | 'insecure' | 'error'
 
-interface Detector {
-  detect(source: CanvasImageSource): Promise<{ rawValue: string }[]>
-}
-declare global {
-  interface Window {
-    BarcodeDetector?: { new (opts?: { formats: string[] }): Detector; getSupportedFormats(): Promise<string[]> }
-  }
-}
-
-const WANTED = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'qr_code', 'data_matrix', 'itf']
-
 export function cameraSupport(): CameraState {
   if (!window.isSecureContext) return 'insecure'
   if (!navigator.mediaDevices?.getUserMedia) return 'unsupported'
-  if (!window.BarcodeDetector) return 'unsupported'
   return 'idle'
 }
 
@@ -32,6 +21,7 @@ export class CameraScanner {
   private deduper = new FrameDeduper()
   private facing: 'environment' | 'user' = 'environment'
   torchAvailable = false
+  decoder: DecoderKind | null = null
 
   constructor(
     private readonly video: HTMLVideoElement,
@@ -44,8 +34,11 @@ export class CameraScanner {
     if (support !== 'idle') return this.set(support)
     this.set('starting')
     try {
-      const formats = (await window.BarcodeDetector!.getSupportedFormats()).filter((f) => WANTED.includes(f))
-      this.detector = new window.BarcodeDetector!({ formats: formats.length ? formats : WANTED })
+      if (!this.detector) {
+        const made = await createDetector()
+        this.detector = made.detector
+        this.decoder = made.kind
+      }
       this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: this.facing, width: { ideal: 1280 } }, audio: false })
       this.video.srcObject = this.stream
       this.video.setAttribute('playsinline', 'true')
@@ -78,7 +71,9 @@ export class CameraScanner {
     } catch {
       /* a single bad frame is not an error */
     }
-    this.raf = window.setTimeout(() => requestAnimationFrame(this.loop), 90) as unknown as number
+    // The WebAssembly decoder runs on the main thread, so give the UI more room between frames.
+    const gap = this.decoder === 'wasm' ? 150 : 90
+    this.raf = window.setTimeout(() => requestAnimationFrame(this.loop), gap) as unknown as number
   }
 
   async torch(on: boolean) {

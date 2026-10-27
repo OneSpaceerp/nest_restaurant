@@ -289,4 +289,8 @@ export default {
   'Cancelled': 'ملغى',
   'No Show': 'لم يحضر',
   'Shift on': 'الوردية على',
+  'The camera needs a secure (https) connection. Use the code field below.': 'تحتاج الكاميرا إلى اتصال آمن (https). استخدم حقل الرمز أدناه.',
+  'This browser cannot open the camera. Use the code field or a scanner.': 'لا يستطيع هذا المتصفح فتح الكاميرا. استخدم حقل الرمز أو قارئ الباركود.',
+  'Camera access was blocked. Allow it in the browser settings, or type the code.': 'تم حظر الوصول إلى الكاميرا. اسمح به من إعدادات المتصفح، أو اكتب الرمز.',
+  'The camera or barcode reader could not start. Type the code instead.': 'تعذّر تشغيل الكاميرا أو قارئ الباركود. اكتب الرمز بدلاً من ذلك.',
 } as Record<string, string>

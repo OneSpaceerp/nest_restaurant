@@ -12,9 +12,11 @@
   "dependencies": {
     "@fontsource/ibm-plex-sans": "5.2.8",
     "@fontsource/ibm-plex-sans-arabic": "5.2.8",
+    "barcode-detector": "3.2.3",
     "socket.io-client": "4.8.1",
     "vue": "3.5.22",
-    "vue-router": "4.6.3"
+    "vue-router": "4.6.3",
+    "zxing-wasm": "3.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "6.0.1",

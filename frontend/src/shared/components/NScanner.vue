@@ -1,6 +1,7 @@
 <script setup lang="ts">
-// Camera scanning with honest fallbacks: insecure origin, unsupported browser and denied permission
-// each explain themselves and leave the manual code field working.
+// Camera scanning with honest fallbacks: insecure origin, no camera API and denied permission each
+// explain themselves and leave the manual code field working. Browsers without a built-in barcode
+// reader (iOS Safari) still scan, through the bundled decoder in ../lib/decoder.
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import NButton from './NButton.vue'
 import NIcon from './NIcon.vue'
@@ -21,9 +22,9 @@ const torchAvailable = ref(false)
 
 const MESSAGES: Partial<Record<CameraState, string>> = {
   insecure: 'The camera needs a secure (https) connection. Use the code field below.',
-  unsupported: 'This browser cannot read barcodes with the camera. Use the code field or a scanner.',
+  unsupported: 'This browser cannot open the camera. Use the code field or a scanner.',
   denied: 'Camera access was blocked. Allow it in the browser settings, or type the code.',
-  error: 'The camera could not start. Type the code instead.',
+  error: 'The camera or barcode reader could not start. Type the code instead.',
 }
 
 onMounted(() => {

@@ -2,9 +2,12 @@
 //  1. copy each built HTML entry to <app>/www/<page>.html with the Jinja boot injected
 //  2. write one web app manifest per surface (distinct id, start_url, scope, icons)
 //  3. fill the service worker template per surface (version, precache list, scope, exclusions)
+//  4. copy the ZXing WebAssembly decoder to <assets>/vendor/ for browsers without BarcodeDetector.
+//     It is left out of the precache (most devices never need its ~1 MB); the worker caches it on
+//     first camera use like any other asset under the app's root.
 
 import { createHash } from 'node:crypto'
-import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 const BOOT = `<script>window.csrf_token = "{{ csrf_token }}"; window.nest_boot = {{ boot }};</script>`
@@ -63,5 +66,10 @@ export function postbuild({ app, frontendDir, surfaces, workerTemplate }) {
       .replace('__PRECACHE__', JSON.stringify(precache))
     writeFileSync(join(outDir, `${s.entry}-sw.js`), worker)
   }
+  const zxingDir = join(frontendDir, 'node_modules', 'zxing-wasm')
+  const zxingVersion = JSON.parse(readFileSync(join(zxingDir, 'package.json'), 'utf8')).version
+  mkdirSync(join(outDir, 'vendor'), { recursive: true })
+  copyFileSync(join(zxingDir, 'dist', 'reader', 'zxing_reader.wasm'), join(outDir, 'vendor', `zxing_reader-${zxingVersion}.wasm`))
+
   console.log(`${app}: ${precache.length} assets, version ${version}, surfaces ${surfaces.map((s) => s.route).join(', ')}`)
 }
