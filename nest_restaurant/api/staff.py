@@ -7,6 +7,7 @@ from nest_restaurant.kit.staff_api import (  # noqa: F401  re-exported whitelist
 	cash_movement,
 	catalog_page,
 	close_register,
+	create_customer,
 	create_return,
 	held_carts,
 	hold_cart,

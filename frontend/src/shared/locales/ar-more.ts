@@ -325,4 +325,12 @@ export default {
   'Type at least 2 letters or the phone number.': 'اكتب حرفين على الأقل أو رقم الهاتف.',
   'Show password': 'إظهار كلمة المرور',
   'Hide password': 'إخفاء كلمة المرور',
+  'New customer': 'عميل جديد',
+  'Full name': 'الاسم الكامل',
+  'Mobile number': 'رقم الموبايل',
+  'Adding a customer needs a connection.': 'إضافة عميل تحتاج إلى اتصال بالإنترنت.',
+  'Add customer': 'إضافة العميل',
+  'Add “{0}” as a new customer': 'أضف «{0}» كعميل جديد',
+  '{0} already has this number — selected.': 'هذا الرقم مسجّل باسم {0} — تم اختياره.',
+  'Customer {0} added': 'تمت إضافة العميل {0}',
 } as Record<string, string>
