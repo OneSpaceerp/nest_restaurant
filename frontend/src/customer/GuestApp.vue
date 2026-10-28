@@ -17,7 +17,7 @@ const props = defineProps<{ root: HTMLElement }>()
 const API = (m: string) => `nest_restaurant.api.guest.${m}`
 const KEY = 'nest_rest_guest:visit'
 
-interface Option { code: string; name: string; sold_out: boolean; price: number | null }
+interface Option { code: string; name: string; description?: string | null; image?: string | null; sold_out: boolean; price: number | null }
 interface Group { group: string; min: number; max: number; options: Option[] }
 interface Item { item_code: string; name: string; name_ar?: string | null; description?: string | null; allergens: string[]; dietary: string[]; image?: string | null; price: number; sold_out: boolean; options: Group[] }
 interface CartLine { key: string; item: Item; qty: number; note: string; modifiers: string[] }
@@ -227,10 +227,16 @@ function lineState(l: { qty: number; sent_qty: number; progress: Record<string, 
       <div v-if="picking" class="stack">
         <p v-if="picking.item.description" class="muted">{{ picking.item.description }}</p>
         <p v-if="picking.item.allergens.length" class="gst__allergy"><strong>{{ t('Allergens') }}:</strong> {{ picking.item.allergens.join(', ') }}</p>
+        <img v-if="picking.item.image" :src="picking.item.image" alt="" class="gst__pick-img" />
         <fieldset v-for="g in picking.item.options" :key="g.group" class="gst__group">
-          <legend>{{ g.group }} <span class="muted">{{ g.min ? t('required') : t('optional') }}</span></legend>
-          <button v-for="o in g.options" :key="o.code" type="button" class="gst__opt" :aria-pressed="picking.chosen.includes(o.code)" :disabled="o.sold_out" @click="toggle(o.code, g)">
-            {{ o.name }}<span v-if="o.price" class="num"> + {{ money(o.price, currency) }}</span>
+          <legend class="gst__group-head">
+            <span class="gst__group-name">{{ g.group }}<small class="muted">{{ g.max === 1 ? t('Choose 1') : t('Choose up to {0}', g.max) }}</small></span>
+            <span :class="['gst__badge', { 'gst__badge--req': g.min }]">{{ g.min ? t('Required') : t('Optional') }}</span>
+          </legend>
+          <button v-for="o in g.options" :key="o.code" type="button" :class="['gst__opt', { 'gst__opt--rich': o.image || o.description }]" :aria-pressed="picking.chosen.includes(o.code)" :disabled="o.sold_out" @click="toggle(o.code, g)">
+            <img v-if="o.image" :src="o.image" alt="" class="gst__opt-img" loading="lazy" />
+            <span class="gst__opt-text"><span class="gst__opt-name">{{ o.name }}</span><span v-if="o.description" class="gst__opt-desc">{{ o.description }}</span><span v-if="o.sold_out" class="gst__opt-desc">{{ t('Sold out') }}</span></span>
+            <span v-if="o.price" class="gst__opt-price num">+ {{ money(o.price, currency) }}</span>
           </button>
         </fieldset>
         <label class="stack"><span>{{ t('Anything we should know?') }}</span><input v-model="picking.note" class="gst__input" maxlength="140" :placeholder="t('e.g. no onions')" /></label>
@@ -282,7 +288,18 @@ function lineState(l: { qty: number; sent_qty: number; progress: Record<string, 
 .gst__bar { display: flex; gap: var(--space-2); padding: var(--space-2) var(--space-3) calc(var(--space-2) + var(--safe-bottom)); background: var(--surface-card); border-block-start: 1px solid var(--border-subtle); }
 .gst__bar .n-btn--lg { flex: 1; min-inline-size: 0; }
 .gst__group { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.gst__group legend { font-weight: 600; margin-block-end: var(--space-2); }
+.gst__group-head { inline-size: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); margin-block-end: var(--space-2); padding: 0; }
+.gst__group-name { display: grid; font-weight: 700; font-size: var(--text-md); }
+.gst__group-name small { font-weight: 400; font-size: var(--text-sm); }
+.gst__badge { font-size: var(--text-xs); font-weight: 600; padding: 2px 10px; border-radius: var(--radius-pill); border: 1px solid var(--border-strong); color: var(--text-muted); white-space: nowrap; }
+.gst__badge--req { border-color: var(--ok-fg); color: var(--ok-fg); background: var(--ok-bg); }
+.gst__pick-img { inline-size: 100%; max-block-size: 240px; object-fit: contain; border-radius: var(--radius-md); background: var(--surface-sunken); }
+.gst__opt--rich { inline-size: 100%; display: flex; align-items: center; gap: var(--space-3); text-align: start; padding-block: var(--space-2); min-block-size: 64px; }
+.gst__opt-img { inline-size: 48px; block-size: 48px; object-fit: cover; border-radius: var(--radius-sm); flex: none; background: #fff; }
+.gst__opt-text { flex: 1; min-inline-size: 0; display: grid; gap: 2px; }
+.gst__opt-name { font-weight: 600; }
+.gst__opt-desc { font-size: var(--text-sm); font-weight: 400; opacity: 0.8; }
+.gst__opt-price { flex: none; font-weight: 600; white-space: nowrap; }
 .gst__opt { min-block-size: var(--touch); padding-inline: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--border-strong); background: var(--surface-card); cursor: pointer; color: var(--text-body); }
 .gst__opt[aria-pressed='true'] { background: var(--nest-ink-900); color: var(--nest-yellow-400); border-color: transparent; font-weight: 600; }
 .gst__input { min-block-size: var(--touch); border-radius: var(--radius-md); border: 1px solid var(--border-strong); padding-inline: var(--space-3); background: var(--surface-card); color: var(--text-strong); }

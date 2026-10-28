@@ -6,6 +6,8 @@
  "field_order": [
   "option_name",
   "option_code",
+  "description",
+  "image",
   "price_item",
   "sold_out"
  ],
@@ -24,6 +26,17 @@
    "reqd": 1,
    "in_list_view": 1,
    "description": "Stable id used by orders"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description",
+   "description": "e.g. coleslaw and a soft drink"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
   },
   {
    "fieldname": "price_item",

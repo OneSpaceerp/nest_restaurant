@@ -18,6 +18,16 @@ def save_plan(register_name: str, tables) -> dict:
 	return floor.save_plan(register_name, obj(tables, []))
 
 
+@frappe.whitelist(methods=["POST"])
+def add_table(register_name: str, floor: str, table_label: str, seats: int = 4, shape: str = "Square") -> dict:
+	return floor.add_table(register_name, floor, table_label, seats, shape)
+
+
+@frappe.whitelist(methods=["POST"])
+def add_floor(register_name: str, floor_name: str) -> dict:
+	return floor.add_floor(register_name, floor_name)
+
+
 @frappe.whitelist()
 def table_qr(table: str) -> dict:
 	return floor.table_qr(table)
@@ -129,6 +139,7 @@ def stations(register_name: str) -> list:
 
 	access.require("kitchen", "cashier", "waiter", "supervisor", "manager")
 	access.require_register(register_name)
+	orders.ensure_station(register_name)
 	return frappe.get_all(
 		"Nest Restaurant Station", {"register": register_name}, ["name", "station_name", "is_default"], order_by="station_name asc"
 	)

@@ -313,7 +313,22 @@ def update_line(name: str, line_id: str, qty: float, note: str | None, expected_
 # ------------------------------------------------------------------------------------------ send
 
 
+def ensure_station(register: str) -> None:
+	"""A register with no station at all gets one catch-all "Kitchen" station, so the first order can
+	be sent before anyone has configured routing. Stations that already exist are never changed."""
+	if frappe.db.exists(STATION, {"register": register}):
+		return
+	name = _("Kitchen")
+	if frappe.db.exists(STATION, name):  # station names are unique across registers
+		name = f"{name} ({register})"[:140]
+	doc = frappe.get_doc({"doctype": STATION, "station_name": name, "register": register, "is_default": 1})
+	doc.flags.ignore_permissions = True  # staff send orders; only the register's own default is created
+	doc.insert()
+	audit.log("station.default_created", STATION, doc.name, register=register)
+
+
 def _stations(register: str) -> list[routing.Station]:
+	ensure_station(register)
 	out = []
 	for s in frappe.get_all(STATION, {"register": register}, ["name", "is_default"]):
 		routes = frappe.get_all("Nest Restaurant Station Route", {"parent": s.name}, ["route_type", "value"])
@@ -359,8 +374,10 @@ def send(name: str, request_key: str, fire_courses: list[int] | None = None, act
 	lines = _order_lines(doc)
 	tickets, unrouted = routing.route_lines(lines, stations, set(fire_courses) if fire_courses else None)
 	if unrouted:
-		names = [l.item_code for l in lines if l.line_id in unrouted]
-		frappe.throw(_("No kitchen station prepares: {0}. Set up station routing first.").format(", ".join(names)))
+		names = sorted({(l.item_name or l.item_code) for l in doc.lines if l.line_id in unrouted})
+		frappe.throw(
+			_("No kitchen station takes {0}. In Nest Restaurant → Stations, tick \"Catch-all station\" on one station or add a route for its item group.").format(", ".join(names))
+		)
 	created = []
 	table_label = frappe.db.get_value(TABLE_DT, doc.table, "table_label") if doc.table else None
 	first_send = not any(flt(l.sent_qty) for l in doc.lines)

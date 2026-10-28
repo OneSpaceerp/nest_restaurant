@@ -6,6 +6,7 @@ export const routes: RouteRecordRaw[] = [
   { path: '/order/:name', name: 'order', component: () => import('./views/OrderView.vue'), props: true },
   { path: '/kitchen/:station?', name: 'kitchen', component: () => import('./views/KitchenView.vue'), props: true, meta: { bare: true } },
   { path: '/counter', name: 'counter', component: () => import('./views/CounterView.vue'), meta: { shift: true } },
+  { path: '/menu', name: 'menu', component: () => import('./views/MenuBuilderView.vue') },
   { path: '/bookings', name: 'bookings', component: () => import('./views/BookingsView.vue') },
   { path: '/shift', name: 'shift', component: () => import('./views/ShiftPage.vue'), meta: { shift: true } },
   { path: '/sync', name: 'sync', component: () => import('./views/SyncPage.vue') },

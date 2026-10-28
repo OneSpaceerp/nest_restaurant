@@ -5,7 +5,9 @@ import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import NIcon from './NIcon.vue'
 import { t } from '../lib/i18n'
 
-const props = defineProps<{ open: boolean; title: string; wide?: boolean; dismissible?: boolean }>()
+// dismissible defaults to true: an omitted boolean prop is false in Vue, which silently removed the
+// close button and Escape from every sheet that didn't pass it
+const props = withDefaults(defineProps<{ open: boolean; title: string; wide?: boolean; dismissible?: boolean }>(), { dismissible: true })
 const emit = defineEmits<{ close: [] }>()
 const el = ref<HTMLDialogElement | null>(null)
 

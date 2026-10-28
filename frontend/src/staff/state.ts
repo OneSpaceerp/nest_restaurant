@@ -8,11 +8,12 @@ export function useTill(): Till {
 }
 
 export const SVC = (m: string) => `nest_restaurant.api.service.${m}`
+export const MENU_API = (m: string) => `nest_restaurant.api.menu.${m}`
 
-export interface MenuOption { code: string; name: string; sold_out: boolean; price: number | null }
+export interface MenuOption { code: string; name: string; description?: string | null; image?: string | null; sold_out: boolean; price: number | null }
 export interface MenuGroup { group: string; min: number; max: number; options: MenuOption[] }
 export interface MenuItem { item_code: string; name: string; name_ar?: string | null; description?: string | null; allergens: string[]; dietary: string[]; image?: string | null; price: number; sold_out: boolean; course?: number; options: MenuGroup[] }
-export interface Menu { currency: string; sections: { name: string; items: MenuItem[] }[] }
+export interface Menu { currency: string; sections: { name: string; name_ar?: string | null; items: MenuItem[] }[] }
 
 export interface OrderLine {
   line_id: string

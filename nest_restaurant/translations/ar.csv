@@ -1,20 +1,50 @@
 1 item · quantity {0},صنف واحد · الكمية {0}
+A check with payments can't be cancelled; refund the payment first.,لا يمكن إلغاء حساب عليه مدفوعات؛ رُدّ المبلغ أولاً.
+A dish in this list belongs elsewhere.,أحد الأصناف في القائمة يتبع مكاناً آخر.
+A partly paid check can't be merged.,لا يمكن دمج حساب مدفوع جزئياً.
+Add at least one option.,أضف اختياراً واحداً على الأقل.
 Against,مقابل
 Amount,المبلغ
+An option is no longer available for {0}.,أحد الاختيارات لم يعد متاحاً لـ {0}.
 Balance due,المبلغ المستحق
 Cancelled,ملغى
 Cashier,الكاشير
 Change,الباقي
+Check changed,تم تعديل الحساب
+"Choices must be between the minimum and the maximum, with at least one allowed.",يجب أن يكون عدد الاختيارات بين الحد الأدنى والأقصى، مع السماح باختيار واحد على الأقل.
+Choose a menu section.,اختر قسماً من المنيو.
+Choose a table.,اختر طاولة.
+Choose two different checks.,اختر حسابين مختلفين.
+Create an Item Group in ERPNext first.,أنشئ مجموعة أصناف في ERPNext أولاً.
 Customer,العميل
 Date,التاريخ
 Discount,الخصم
 Draft — not a valid receipt,مسودة — ليس إيصالاً صالحاً
+Enter a price above zero.,أدخل سعراً أكبر من صفر.
 Enter a valid email address.,أدخل بريداً إلكترونياً صحيحاً.
 Enter a valid mobile number.,أدخل رقم موبايل صحيحاً.
 Enter the customer's name.,أدخل اسم العميل.
+Every option needs a name.,كل اختيار يحتاج اسماً.
+Every section needs its own name.,كل قسم يحتاج اسماً مختلفاً.
 "Floor, kitchen and counter",الصالة والمطبخ والكاشير
+Give a reason for cancelling.,أدخل سبب الإلغاء.
+Give the dish a name.,أدخل اسم الصنف.
+Give the floor a name.,أدخل اسم الصالة.
+Give the option group a name.,أدخل اسم مجموعة الاختيارات.
+Give the table a name or number.,أدخل اسم الطاولة أو رقمها.
 Item,الصنف
+Items already sent to the kitchen need a void reason.,الأصناف المرسلة للمطبخ تحتاج سبب إلغاء.
+Kitchen,المطبخ
+Line not found,البند غير موجود
+Move or remove the dishes in {0} before removing the section.,انقل أصناف {0} أو أزلها قبل حذف القسم.
+"No kitchen station takes {0}. In Nest Restaurant → Stations, tick ""Catch-all station"" on one station or add a route for its item group.",لا توجد محطة مطبخ تستقبل {0}. من Nest Restaurant ← المحطات، فعّل «محطة لكل الأصناف» في محطة واحدة أو أضف توجيهاً لمجموعة الصنف.
+Only a billed check can be reopened.,يمكن إعادة فتح الحساب المطبوع فقط.
+Only open checks on the same register can be merged.,يمكن دمج الحسابات المفتوحة على نفس نقطة البيع فقط.
+Option prices cannot be negative.,لا يمكن أن يكون سعر الاختيار سالباً.
 Order from your table,اطلب من طاولتك
+Order not found,الطلب غير موجود
+Products,منتجات
+Quantity can't be negative.,لا يمكن أن تكون الكمية سالبة.
 Receipt,إيصال
 Receipt footer,تذييل الإيصال
 Receipt logo,شعار الإيصال
@@ -26,10 +56,30 @@ Rounding,التقريب
 "Scan, check prices, skip the wait",امسح، اعرف السعر، ووفّر وقت الانتظار
 Serial,الرقم التسلسلي
 Set a default Customer Group in Selling Settings (or on the POS Profile) to add customers at the till.,حدّد مجموعة عملاء افتراضية في إعدادات البيع (أو في ملف نقطة البيع) لإضافة عملاء من الكاشير.
+Some items haven't been sent to the kitchen yet.,بعض الأصناف لم تُرسل إلى المطبخ بعد.
+Someone else changed this check. Review the latest version and try again.,قام شخص آخر بتعديل هذا الحساب. راجع آخر نسخة وحاول مرة أخرى.
 Subtotal,المجموع الفرعي
+Table {0} belongs to another register.,الطاولة {0} تتبع نقطة بيع أخرى.
+Table {0} is in use; merge the checks instead.,الطاولة {0} مشغولة؛ ادمج الحسابات بدلاً من ذلك.
+Table {0} is on another register.,الطاولة {0} تتبع نقطة بيع أخرى.
+Table {0} is {1}.,الطاولة {0} حالتها {1}.
 Tax ID,الرقم الضريبي
 Tel,هاتف
 Thank you for your visit,شكراً لزيارتكم
+That table belongs to another register.,هذه الطاولة تتبع نقطة بيع أخرى.
+That would remove items already paid for.,هذا سيحذف أصنافاً تم دفعها بالفعل.
+The group requires more choices than it has options.,المجموعة تطلب اختيارات أكثر من عدد خياراتها.
+There is already a floor called {0}.,توجد صالة باسم {0} بالفعل.
+There is already a section called {0}.,يوجد قسم باسم {0} بالفعل.
+There is already a table {0} on this floor.,توجد طاولة {0} في هذه الصالة بالفعل.
+There is already an option group called {0}. Pick it from the list instead.,توجد مجموعة اختيارات باسم {0}. اخترها من القائمة بدلاً من ذلك.
+This cannot be changed here.,لا يمكن تغيير هذا هنا.
+This check can't be edited while {0}.,لا يمكن تعديل هذا الحساب وهو {0}.
+This check is {0}; reopen it to add items.,هذا الحساب {0}؛ أعد فتحه لإضافة أصناف.
+This dish belongs to another register.,هذا الصنف يتبع نقطة بيع أخرى.
+This floor is on another register.,هذه الصالة تتبع نقطة بيع أخرى.
 Time,الوقت
 Total,الإجمالي
+Unknown service type,نوع خدمة غير معروف
 {0} items · quantity {1},{0} أصناف · الكمية {1}
+{0}: choose between {1} and {2}.,{0}: اختر بين {1} و{2}.

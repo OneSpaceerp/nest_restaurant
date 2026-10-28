@@ -137,6 +137,10 @@ def menu_for_register(register: str, guest_only: bool) -> dict:
 		order_by="section asc, sequence asc",
 	)
 	prices = catalog._price_map(price_list, [r.item_code for r in rows])
+	# a dish without its own menu photo shows the ERPNext Item's image
+	item_images = dict(
+		frappe.get_all("Item", {"name": ["in", [r.item_code for r in rows] or ["__none__"]]}, ["name", "image"], as_list=True)
+	)
 	sections: dict[str, list] = {}
 	for r in rows:
 		if not prices.get(r.item_code):
@@ -145,13 +149,17 @@ def menu_for_register(register: str, guest_only: bool) -> dict:
 		for g in frappe.get_all("Nest Restaurant Menu Item Modifier", {"parent": r.name}, pluck="modifier_group"):
 			grp = frappe.get_cached_doc("Nest Restaurant Modifier Group", g)
 			opt_prices = catalog._price_map(price_list, [o.price_item for o in grp.options if o.price_item])
+			opt_images = dict(
+				frappe.get_all("Item", {"name": ["in", [o.price_item for o in grp.options if o.price_item] or ["__none__"]]}, ["name", "image"], as_list=True)
+			)
 			groups.append(
 				{
 					"group": grp.group_name,
 					"min": cint(grp.min_select),
 					"max": cint(grp.max_select),
 					"options": [
-						{"code": o.option_code, "name": o.option_name, "sold_out": bool(o.sold_out),
+						{"code": o.option_code, "name": o.option_name, "description": o.get("description"),
+						 "image": o.get("image") or opt_images.get(o.price_item), "sold_out": bool(o.sold_out),
 						 "price": (opt_prices.get(o.price_item) or {}).get("rate") if o.price_item else 0}
 						for o in grp.options
 					],
@@ -165,16 +173,24 @@ def menu_for_register(register: str, guest_only: bool) -> dict:
 				"description": r.description,
 				"allergens": [a.strip() for a in (r.allergens or "").split(",") if a.strip()],
 				"dietary": [a.strip() for a in (r.dietary or "").split(",") if a.strip()],
-				"image": r.image,
+				"image": r.image or item_images.get(r.item_code),
 				"price": prices[r.item_code]["rate"],
 				"sold_out": bool(r.sold_out),
 				"course": cint(r.default_course) or 1,
 				"options": groups,
 			}
 		)
+	# sections in the order set in the menu builder (Menu Section); any others follow by name
+	order = {
+		s.section_name: (i, s.section_name_ar)
+		for i, s in enumerate(
+			frappe.get_all("Nest Restaurant Menu Section", {"register": register}, ["section_name", "section_name_ar"], order_by="sequence asc, section_name asc")
+		)
+	}
+	names = sorted(sections, key=lambda k: (order.get(k, (len(order), None))[0], k))
 	return {
 		"currency": frappe.get_cached_value("POS Profile", reg.pos_profile, "currency"),
-		"sections": [{"name": k, "items": v} for k, v in sections.items()],
+		"sections": [{"name": k, "name_ar": order.get(k, (0, None))[1], "items": sections[k]} for k in names],
 	}
 
 

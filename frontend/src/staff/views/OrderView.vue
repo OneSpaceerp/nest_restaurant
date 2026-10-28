@@ -9,7 +9,7 @@ import NState from '@shared/components/NState.vue'
 import NStatus from '@shared/components/NStatus.vue'
 import { toast } from '@shared/components/toast'
 import { ApiError, call, newKey } from '@shared/lib/api'
-import { money, t } from '@shared/lib/i18n'
+import { lang, money, t } from '@shared/lib/i18n'
 import { on, onReconnect } from '@shared/lib/realtime'
 import PaySheet from '@shared/till/PaySheet.vue'
 import { SVC, lineStage, useTill, type Menu, type MenuItem, type Order, type OrderLine } from '../state'
@@ -245,7 +245,7 @@ async function cancelOrder() {
     <template v-else>
       <section class="ord__menu" :aria-label="t('Menu')">
         <div class="ord__sections" role="tablist">
-          <button v-for="s in menu?.sections ?? []" :key="s.name" type="button" role="tab" :aria-selected="section === s.name" class="ord__sec" @click="section = s.name">{{ s.name }}</button>
+          <button v-for="s in menu?.sections ?? []" :key="s.name" type="button" role="tab" :aria-selected="section === s.name" class="ord__sec" @click="section = s.name">{{ (lang() === 'ar' && s.name_ar) || s.name }}</button>
         </div>
         <div class="ord__pickers">
           <div class="ord__seg" role="radiogroup" :aria-label="t('Seat')">
@@ -260,8 +260,9 @@ async function cancelOrder() {
         </div>
         <ul class="ord__items scroll" role="list">
           <li v-for="m in items" :key="m.item_code">
-            <button type="button" class="ord__item" :disabled="m.sold_out || !editable" @click="tapItem(m)">
-              <span class="ord__item-name">{{ m.name }}</span>
+            <button type="button" :class="['ord__item', { 'ord__item--img': m.image }]" :disabled="m.sold_out || !editable" @click="tapItem(m)">
+              <img v-if="m.image" :src="m.image" alt="" class="ord__item-img" loading="lazy" decoding="async" />
+              <span class="ord__item-name">{{ (lang() === 'ar' && m.name_ar) || m.name }}</span>
               <span v-if="m.allergens.length" class="ord__allergens">{{ m.allergens.join(', ') }}</span>
               <span class="ord__item-foot">
                 <span class="num">{{ money(m.price, currency) }}</span>
@@ -335,10 +336,20 @@ async function cancelOrder() {
         <div v-if="picking" class="stack">
           <p v-if="picking.item.description" class="muted">{{ picking.item.description }}</p>
           <p v-if="picking.item.allergens.length" class="ord__allergy"><strong>{{ t('Allergens') }}:</strong> {{ picking.item.allergens.join(', ') }}</p>
+          <img v-if="picking.item.image" :src="picking.item.image" alt="" class="ord__pick-img" />
           <fieldset v-for="g in picking.item.options" :key="g.group" class="ord__group">
-            <legend>{{ g.group }} <span class="muted">{{ g.min ? t('choose {0}', g.min === g.max ? g.min : `${g.min}–${g.max}`) : t('optional') }}</span></legend>
-            <button v-for="o in g.options" :key="o.code" type="button" class="ord__opt" :aria-pressed="picking.chosen.includes(o.code)" :disabled="o.sold_out" @click="toggleOption(o.code, g)">
-              {{ o.name }}<span v-if="o.price" class="num muted"> + {{ money(o.price, currency) }}</span><span v-if="o.sold_out" class="muted"> · {{ t('Sold out') }}</span>
+            <legend class="ord__group-head">
+              <span class="ord__group-name">{{ g.group }}<small class="muted">{{ g.max === 1 ? t('Choose 1') : t('Choose up to {0}', g.max) }}</small></span>
+              <span :class="['ord__badge', g.min ? 'ord__badge--req' : '']">{{ g.min ? t('Required') : t('Optional') }}</span>
+            </legend>
+            <button v-for="o in g.options" :key="o.code" type="button" :class="['ord__opt', { 'ord__opt--rich': o.image || o.description }]" :aria-pressed="picking.chosen.includes(o.code)" :disabled="o.sold_out" @click="toggleOption(o.code, g)">
+              <img v-if="o.image" :src="o.image" alt="" class="ord__opt-img" loading="lazy" />
+              <span class="ord__opt-text">
+                <span class="ord__opt-name">{{ o.name }}</span>
+                <span v-if="o.description" class="ord__opt-desc muted">{{ o.description }}</span>
+                <span v-if="o.sold_out" class="ord__opt-desc">{{ t('Sold out') }}</span>
+              </span>
+              <span v-if="o.price" class="ord__opt-price num">+ {{ money(o.price, currency) }}</span>
             </button>
           </fieldset>
           <label class="stack"><span>{{ t('Note for the kitchen') }}</span><input v-model="picking.note" class="ord__input" maxlength="140" /></label>
@@ -412,6 +423,9 @@ async function cancelOrder() {
 .ord__segb[aria-checked='true'], .ord__segb[aria-pressed='true'] { background: var(--brand-fill); color: var(--brand-on-fill); border-color: var(--nest-yellow-500); }
 .ord__items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); flex: 1; min-block-size: 0; align-content: start; }
 .ord__item { inline-size: 100%; min-block-size: 96px; display: grid; gap: var(--space-1); align-content: space-between; text-align: start; padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--surface-card); cursor: pointer; color: var(--text-body); }
+.ord__item--img { align-content: start; padding-block-start: 0; overflow: hidden; }
+.ord__item-img { inline-size: calc(100% + 2 * var(--space-3)); margin-inline: calc(-1 * var(--space-3)); aspect-ratio: 4 / 3; object-fit: cover; background: var(--surface-sunken); margin-block-end: var(--space-2); }
+.ord__pick-img { inline-size: 100%; max-block-size: 220px; object-fit: contain; border-radius: var(--radius-md); background: var(--surface-sunken); }
 .ord__item:disabled { opacity: 0.55; cursor: not-allowed; }
 .ord__item-name { font-weight: 600; color: var(--text-strong); overflow-wrap: anywhere; }
 .ord__allergens { font-size: var(--text-xs); color: var(--warn-fg); }
@@ -438,7 +452,17 @@ async function cancelOrder() {
 .ord__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
 .ord__actions .n-btn--lg { grid-column: 1 / -1; }
 .ord__group { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.ord__group legend { font-weight: 600; margin-block-end: var(--space-2); }
+.ord__group-head { inline-size: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); margin-block-end: var(--space-2); padding: 0; }
+.ord__group-name { display: grid; font-weight: 700; color: var(--text-strong); font-size: var(--text-md); }
+.ord__group-name small { font-weight: 400; font-size: var(--text-sm); }
+.ord__badge { font-size: var(--text-xs); font-weight: 600; padding: 2px 10px; border-radius: var(--radius-pill); border: 1px solid var(--border-strong); color: var(--text-muted); }
+.ord__badge--req { border-color: var(--ok-fg); color: var(--ok-fg); background: var(--ok-bg); }
+.ord__opt--rich { inline-size: 100%; display: flex; align-items: center; gap: var(--space-3); text-align: start; padding-block: var(--space-2); min-block-size: 64px; }
+.ord__opt-img { inline-size: 48px; block-size: 48px; object-fit: cover; border-radius: var(--radius-sm); flex: none; background: var(--surface-sunken); }
+.ord__opt-text { flex: 1; min-inline-size: 0; display: grid; gap: 2px; }
+.ord__opt-name { font-weight: 600; }
+.ord__opt-desc { font-size: var(--text-sm); font-weight: 400; }
+.ord__opt-price { flex: none; font-weight: 600; white-space: nowrap; }
 .ord__opt { min-block-size: var(--touch); padding-inline: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--border-strong); background: var(--surface-card); cursor: pointer; color: var(--text-body); }
 .ord__opt[aria-pressed='true'] { background: var(--brand-fill); color: var(--brand-on-fill); border-color: var(--nest-yellow-500); font-weight: 600; }
 .ord__input { min-block-size: var(--touch); border-radius: var(--radius-md); border: 1px solid var(--border-strong); padding-inline: var(--space-3); background: var(--surface-card); color: var(--text-strong); }

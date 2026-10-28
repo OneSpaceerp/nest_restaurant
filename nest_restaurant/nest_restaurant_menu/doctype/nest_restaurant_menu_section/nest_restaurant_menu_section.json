@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_name",
+  "register",
+  "section_name_ar",
+  "sequence"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_name",
+   "fieldtype": "Data",
+   "label": "Section",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "register",
+   "fieldtype": "Link",
+   "label": "Register",
+   "options": "Nest Restaurant Register",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "section_name_ar",
+   "fieldtype": "Data",
+   "label": "Arabic name"
+  },
+  {
+   "fieldname": "sequence",
+   "fieldtype": "Int",
+   "label": "Order",
+   "default": "0",
+   "in_list_view": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Nest Restaurant Menu",
+ "name": "Nest Restaurant Menu Section",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Nest Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Nest Restaurant Waiter",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Nest Restaurant Kitchen",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:{register}-{section_name}",
+ "naming_rule": "Expression",
+ "track_changes": 1,
+ "title_field": "section_name",
+ "description": "Menu sections in the order guests and staff see them; items name their section.",
+ "show_title_field_in_link": 1
+}

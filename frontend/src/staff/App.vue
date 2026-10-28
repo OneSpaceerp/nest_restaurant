@@ -29,6 +29,7 @@ const nav = computed(() => {
   if (r.cashier || r.supervisor || r.manager) items.push({ to: '/counter', label: t('Counter'), icon: 'register' })
   if (r.waiter || r.cashier || r.supervisor || r.manager) items.push({ to: '/bookings', label: t('Bookings'), icon: 'calendar' })
   if (r.cashier || r.supervisor || r.manager) items.push({ to: '/shift', label: t('Shift'), icon: 'cash' })
+  if (r.manager) items.push({ to: '/menu', label: t('Menu'), icon: 'menu' })
   return items
 })
 const needsShift = computed(() => Boolean(route.meta.shift))

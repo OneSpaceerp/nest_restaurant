@@ -77,6 +77,58 @@ def save_plan(register: str, tables: list[dict]) -> dict:
 	return floor_state(register)
 
 
+def add_table(register: str, floor: str, table_label: str, seats: int = 4, shape: str = "Square") -> dict:
+	"""New table on a floor, placed in the first free spot of a 20-unit grid so it never lands on top
+	of another table; the manager then drags it where it belongs."""
+	access.require("manager")
+	access.require_register(register)
+	fl = frappe.get_doc(FLOOR, floor)
+	if fl.register != register:
+		frappe.throw(_("This floor is on another register."))
+	label = " ".join((table_label or "").split())[:40]
+	if not label:
+		frappe.throw(_("Give the table a name or number."))
+	if frappe.db.exists(TABLE_DT, {"floor": floor, "table_label": label}):
+		frappe.throw(_("There is already a table {0} on this floor.").format(label))
+	shape = shape if shape in ("Square", "Round", "Rectangle") else "Square"
+	w, h = (140, 90) if shape == "Rectangle" else (90, 90)
+	taken = frappe.get_all(TABLE_DT, {"floor": floor}, ["x", "y", "w", "h"])
+	width, height = cint(fl.width) or 1200, cint(fl.height) or 800
+	x, y = _free_spot(taken, width, height, w, h)
+	doc = frappe.get_doc({"doctype": TABLE_DT, "floor": floor, "table_label": label, "seats": max(cint(seats), 1), "shape": shape, "x": x, "y": y, "w": w, "h": h})
+	doc.insert()  # managers have create on tables
+	audit.log("floor.table_added", TABLE_DT, doc.name, register=register)
+	return floor_state(register)
+
+
+def _free_spot(taken, width: int, height: int, w: int, h: int, step: int = 20, gap: int = 20) -> tuple[int, int]:
+	def clear(x, y):
+		return all(
+			x + w + gap <= cint(t.x) or cint(t.x) + (cint(t.w) or 90) + gap <= x or y + h + gap <= cint(t.y) or cint(t.y) + (cint(t.h) or 90) + gap <= y
+			for t in taken
+		)
+
+	for y in range(gap, max(height - h, gap) + 1, step):
+		for x in range(gap, max(width - w, gap) + 1, step):
+			if clear(x, y):
+				return x, y
+	return gap, gap
+
+
+def add_floor(register: str, floor_name: str) -> dict:
+	access.require("manager")
+	access.require_register(register)
+	name = " ".join((floor_name or "").split())[:60]
+	if not name:
+		frappe.throw(_("Give the floor a name."))
+	if frappe.db.exists(FLOOR, {"register": register, "floor_name": name}):
+		frappe.throw(_("There is already a floor called {0}.").format(name))
+	seq = frappe.db.count(FLOOR, {"register": register})
+	frappe.get_doc({"doctype": FLOOR, "register": register, "floor_name": name, "sequence": seq}).insert()
+	audit.log("floor.added", FLOOR, name, register=register)
+	return floor_state(register)
+
+
 def table_qr(table: str) -> dict:
 	"""Signed table context for printing on the table. It names the table; it grants nothing."""
 	access.require("manager", "supervisor")
