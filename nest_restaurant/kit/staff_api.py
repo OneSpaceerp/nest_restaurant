@@ -6,7 +6,7 @@ from frappe import _
 
 from ..appspec import SPEC
 from ..core.fsm import MACHINES
-from . import access, catalog, invoicing, pins, register
+from . import access, catalog, customers, invoicing, pins, register
 from .util import obj
 
 
@@ -76,6 +76,12 @@ def promotions(register_name: str) -> list:
 def resolve_scan(register_name: str, code: str) -> dict:
 	reg = access.require_register(register_name)
 	return catalog.resolve_scan(reg.pos_profile, code)
+
+
+@frappe.whitelist()
+def search_customers(register_name: str, query: str = "") -> list:
+	reg = access.require_register(register_name)
+	return customers.search(frappe.get_cached_doc("POS Profile", reg.pos_profile), str(query)[:80])
 
 
 @frappe.whitelist(methods=["POST"])

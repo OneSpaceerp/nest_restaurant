@@ -17,6 +17,7 @@ from nest_restaurant.kit.staff_api import (  # noqa: F401  re-exported whitelist
 	request_approval,
 	resolve_scan,
 	resume_cart,
+	search_customers,
 	retry_close,
 	returnable,
 	set_pin,

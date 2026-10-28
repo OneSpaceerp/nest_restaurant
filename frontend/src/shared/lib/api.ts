@@ -108,6 +108,10 @@ export async function call<T = unknown>(method: string, args: Record<string, unk
   const exc = String(body.exc_type ?? '')
   if ([502, 503, 504].includes(res.status)) throw new ApiError('The server is busy. Trying again shortly.', 'transient', res.status, exc)
   if (res.status === 429) throw new ApiError('Too many requests. Wait a moment and try again.', 'transient', res.status, exc)
+  // the session ended (expired, or signed out in another tab): staff surfaces show their sign-in screen
+  if ((res.status === 401 || res.status === 403) && /(?:^|;\s*)user_id=Guest(?:;|$)/.test(document.cookie)) {
+    window.dispatchEvent(new CustomEvent('nest:signed-out'))
+  }
   if (res.status === 403 || exc === 'PermissionError' || exc === 'CSRFTokenError') throw new ApiError(msg || 'You do not have access to do this.', 'permission', res.status, exc, title)
   if (exc === 'RequestConflict') throw new ApiError(msg, 'conflict', res.status, exc, title)
   if (res.status >= 500 && !exc) throw new ApiError('The server hit a problem. Your work is kept; try again.', 'ambiguous', res.status, exc)

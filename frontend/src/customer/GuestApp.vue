@@ -148,7 +148,7 @@ function lineState(l: { qty: number; sent_qty: number; progress: Record<string, 
 <template>
   <div class="gst">
     <header class="gst__top">
-      <img src="/assets/nest_restaurant/images/nest-restaurant-logo.png" alt="" width="32" height="32" class="gst__logo" />
+      <img src="/assets/nest_restaurant/images/nest-restaurant-logo.png?v=08c9951e" alt="" width="32" height="32" class="gst__logo" />
       <div class="gst__where"><strong>{{ visit.outlet || 'Nest Restaurant' }}</strong><span v-if="visit.table">{{ t('Table {0}', visit.table) }}</span></div>
       <span class="spacer" />
       <button type="button" class="gst__util" :aria-label="t('Language')" @click="toggleLanguage('nest_rest_guest', props.root)"><NIcon name="globe" /></button>
@@ -251,7 +251,7 @@ function lineState(l: { qty: number; sent_qty: number; progress: Record<string, 
       <template #actions><NButton variant="primary" size="lg" icon="send" :busy="sending" :disabled="!visit.cart.length" @click="send">{{ t('Send order') }}</NButton></template>
     </NSheet>
     <NToasts />
-    <NInstall app="nest_rest_guest" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png" />
+    <NInstall app="nest_rest_guest" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png?v=08c9951e" />
   </div>
 </template>
 

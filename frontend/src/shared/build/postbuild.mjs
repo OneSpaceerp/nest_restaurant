@@ -9,6 +9,7 @@
 import { createHash } from 'node:crypto'
 import { copyFileSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { splashHtml } from './splash.mjs'
 
 const BOOT = `<script>window.csrf_token = "{{ csrf_token }}"; window.nest_boot = {{ boot }};</script>`
 
@@ -28,12 +29,22 @@ export function postbuild({ app, frontendDir, surfaces, workerTemplate }) {
   for (const f of files.sort()) hash.update(readFileSync(f))
   const version = hash.digest('hex').slice(0, 12)
   const precache = files.map((f) => assetRoot + relative(outDir, f).replaceAll('\\', '/'))
+  // icons keep their URL across redraws, so stamp them with their content (see tools/make_icons.py)
+  const iconHash = createHash('sha256')
+  const iconDir = join(frontendDir, '..', app, 'public', 'manifest')
+  for (const f of readdirSync(iconDir).filter((n) => n.endsWith('.png')).sort()) iconHash.update(readFileSync(join(iconDir, f)))
+  const iv = `?v=${iconHash.digest('hex').slice(0, 8)}`
 
   for (const s of surfaces) {
     const html = readFileSync(join(outDir, `${s.entry}.html`), 'utf8')
     if (!html.includes('<!--nest-boot-->')) throw new Error(`${s.entry}.html lost its boot marker`)
     mkdirSync(wwwDir, { recursive: true })
-    writeFileSync(join(wwwDir, `${s.page}.html`), html.replace('<!--nest-boot-->', BOOT))
+    let page = html.replace('<!--nest-boot-->', BOOT)
+    if (s.splash) {
+      const logo = readFileSync(join(frontendDir, '..', app, 'public', 'images', s.splash.logo)).toString('base64')
+      page = page.replace('<!--nest-splash-->', splashHtml({ logoDataUri: `data:image/png;base64,${logo}`, name: s.name, tagline: s.splash.tagline, background: s.background }))
+    }
+    writeFileSync(join(wwwDir, `${s.page}.html`), page)
 
     const manifest = {
       id: s.route + '/',
@@ -48,10 +59,10 @@ export function postbuild({ app, frontendDir, surfaces, workerTemplate }) {
       background_color: s.background,
       theme_color: s.theme,
       icons: [
-        { src: `/assets/${app}/manifest/icon-192.png`, sizes: '192x192', type: 'image/png', purpose: 'any' },
-        { src: `/assets/${app}/manifest/icon-512.png`, sizes: '512x512', type: 'image/png', purpose: 'any' },
-        { src: `/assets/${app}/manifest/icon-192-maskable.png`, sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-        { src: `/assets/${app}/manifest/icon-512-maskable.png`, sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        { src: `/assets/${app}/manifest/icon-192.png${iv}`, sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: `/assets/${app}/manifest/icon-512.png${iv}`, sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: `/assets/${app}/manifest/icon-192-maskable.png${iv}`, sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+        { src: `/assets/${app}/manifest/icon-512-maskable.png${iv}`, sizes: '512x512', type: 'image/png', purpose: 'maskable' },
       ],
       shortcuts: s.shortcuts ?? [],
     }

@@ -24,7 +24,7 @@ const authoritative = computed(() => tl.quoteState.value === 'fresh')
         <h2>{{ title ?? t('Current sale') }}</h2>
         <span class="tape__head-tools">
           <button type="button" class="tape__customer" @click="emit('customer')">
-            <NIcon name="user" :size="16" />{{ tl.cart.customer ?? t('Walk-in customer') }}
+            <NIcon name="user" :size="16" /><span class="tape__cname">{{ tl.cart.customerName ?? tl.cart.customer ?? t('Walk-in customer') }}</span>
           </button>
           <button type="button" class="tape__held" :aria-label="t('Held sales')" :title="t('Held sales')" @click="emit('held')"><NIcon name="history" :size="18" /></button>
         </span>

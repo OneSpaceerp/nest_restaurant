@@ -19,6 +19,7 @@ postbuild({
       background: '#f4f5f6',
       theme: '#1e1d1d',
       cachePrefix: 'nestrest-staff-',
+      splash: { logo: 'nest-restaurant-logo.png', tagline: 'Floor, kitchen and counter' },
       exclude: ['/nest-restaurant/customer'],
       shortcuts: [{ name: 'Floor', url: '/nest-restaurant/floor' }, { name: 'Kitchen', url: '/nest-restaurant/kitchen' }],
     },
@@ -32,6 +33,7 @@ postbuild({
       background: '#1e1d1d',
       theme: '#1e1d1d',
       cachePrefix: 'nestrest-guest-',
+      splash: { logo: 'nest-restaurant-logo.png', tagline: 'Order from your table' },
     },
   ],
 })

@@ -10,9 +10,8 @@ from ..appspec import SPEC
 
 
 def staff_context(context, route: str):
-	if frappe.session.user == "Guest":
-		frappe.local.flags.redirect_location = f"/login?redirect-to={route}"
-		raise frappe.Redirect
+	# Signed-out visitors get the same shell with user "Guest": the app shows its own sign-in screen
+	# (NLogin.vue) instead of Frappe's /login, and the boot carries nothing a guest should not see.
 	csrf_token = frappe.sessions.get_csrf_token()
 	frappe.db.commit()  # persist the freshly minted token before the page uses it  # nosemgrep
 	return _context(csrf_token, route, "staff")

@@ -62,3 +62,18 @@ export function cycleTheme(app: string, root: HTMLElement) {
   write(`${app}:theme`, prefs.theme)
   root.dataset.theme = prefs.theme
 }
+
+/** Fade out the launch splash (src/build/splash.mjs) once the app has mounted. It stays at least
+ *  `minMs` from navigation start so a fast load doesn't flash it, and waits briefly for fonts so the
+ *  first frame under it is already in the right typeface. */
+export function dismissSplash(minMs = 700) {
+  const el = document.getElementById('nest-splash')
+  if (!el) return
+  const fonts = document.fonts?.ready ?? Promise.resolve()
+  const fontWait = Promise.race([fonts, new Promise((r) => setTimeout(r, 800))])
+  const minWait = new Promise((r) => setTimeout(r, Math.max(0, minMs - performance.now())))
+  void Promise.all([fontWait, minWait]).then(() => {
+    el.classList.add('is-done')
+    setTimeout(() => el.remove(), 400)
+  })
+}

@@ -4,7 +4,7 @@ app_publisher = "Nest Software Development (nsdLabs)"
 app_description = "Restaurant and cafe point of sale for ERPNext: floor, waiters, kitchen display, guest ordering"
 app_email = "info@nsd-eg.com"
 app_license = "UNLICENSED"  # pending a publisher licensing decision; see docs/provenance.md
-app_logo_url = "/assets/nest_restaurant/images/nest-restaurant-logo.png"
+app_logo_url = "/assets/nest_restaurant/images/nest-restaurant-logo.png?v=08c9951e"
 app_home = "/desk/nest-restaurant"
 
 required_apps = ["erpnext"]

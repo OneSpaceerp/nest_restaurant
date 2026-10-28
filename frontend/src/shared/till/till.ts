@@ -90,6 +90,7 @@ export function createTill(app: 'nest_pos' | 'nest_restaurant', site: string) {
     id: newKey('cart-'),
     lines: [] as CartLine[],
     customer: null as string | null,
+    customerName: null as string | null,
     coupons: [] as string[],
     basket: null as string | null,
     note: '',
@@ -118,8 +119,8 @@ export function createTill(app: 'nest_pos' | 'nest_restaurant', site: string) {
     db = await openDb(dbName(app, site, boot.value?.user ?? 'unknown', name))
     outbox = new Outbox(db, sendEntry, `${app}:${site}:${name}:outbox`)
     outbox.subscribe((e) => (outboxEntries.value = e))
-    const saved = await idb.get<{ id: string; lines: CartLine[]; customer: string | null; basket: string | null }>(db, 'carts', 'active')
-    if (saved?.lines?.length) Object.assign(cart, { id: saved.id, lines: saved.lines, customer: saved.customer, basket: saved.basket })
+    const saved = await idb.get<{ id: string; lines: CartLine[]; customer: string | null; customerName?: string | null; basket: string | null }>(db, 'carts', 'active')
+    if (saved?.lines?.length) Object.assign(cart, { id: saved.id, lines: saved.lines, customer: saved.customer, customerName: saved.customerName ?? null, basket: saved.basket })
     await loadCatalog()
     void outbox.flush()
   }
@@ -171,7 +172,7 @@ export function createTill(app: 'nest_pos' | 'nest_restaurant', site: string) {
   }
 
   function clearCart() {
-    Object.assign(cart, { id: newKey('cart-'), lines: [], customer: null, coupons: [], basket: null, note: '' })
+    Object.assign(cart, { id: newKey('cart-'), lines: [], customer: null, customerName: null, coupons: [], basket: null, note: '' })
     quote.value = null
     quoteState.value = 'idle'
   }
@@ -245,7 +246,7 @@ export function createTill(app: 'nest_pos' | 'nest_restaurant', site: string) {
       quoteState.value = cart.lines.length ? 'loading' : 'idle'
       clearTimeout(quoteTimer)
       quoteTimer = window.setTimeout(refreshQuote, 350)
-      if (db) void idb.put(db, 'carts', { id: 'active', lines: JSON.parse(JSON.stringify(cart.lines)), customer: cart.customer, basket: cart.basket, cartId: cart.id })
+      if (db) void idb.put(db, 'carts', { id: 'active', lines: JSON.parse(JSON.stringify(cart.lines)), customer: cart.customer, customerName: cart.customerName, basket: cart.basket, cartId: cart.id })
     },
   )
 

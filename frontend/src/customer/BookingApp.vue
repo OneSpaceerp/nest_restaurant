@@ -54,7 +54,7 @@ async function book() {
 <template>
   <div class="book scroll">
     <section class="book__card">
-      <img src="/assets/nest_restaurant/images/nest-restaurant-logo.png" alt="" width="48" height="48" />
+      <img src="/assets/nest_restaurant/images/nest-restaurant-logo.png?v=08c9951e" alt="" width="48" height="48" />
       <template v-if="done">
         <h1>{{ t('Request received') }}</h1>
         <p>{{ t('We’ll confirm your table by phone. Your reference is {0}.', done.reservation) }}</p>
@@ -82,7 +82,7 @@ async function book() {
       </form>
     </section>
     <NToasts />
-    <NInstall app="nest_rest_guest" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png" />
+    <NInstall app="nest_rest_guest" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png?v=08c9951e" />
   </div>
 </template>
 

@@ -9,14 +9,18 @@ Customer,العميل
 Date,التاريخ
 Discount,الخصم
 Draft — not a valid receipt,مسودة — ليس إيصالاً صالحاً
+"Floor, kitchen and counter",الصالة والمطبخ والكاشير
 Item,الصنف
+Order from your table,اطلب من طاولتك
 Receipt,إيصال
 Receipt footer,تذييل الإيصال
 Receipt logo,شعار الإيصال
 Refund total,إجمالي المرتجع
 Register,نقطة البيع
+Retail till for ERPNext,نقطة بيع للتجزئة على ERPNext
 Return receipt,إيصال مرتجع
 Rounding,التقريب
+"Scan, check prices, skip the wait",امسح، اعرف السعر، ووفّر وقت الانتظار
 Serial,الرقم التسلسلي
 Subtotal,المجموع الفرعي
 Tax ID,الرقم الضريبي

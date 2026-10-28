@@ -21,7 +21,7 @@ from ..core.fsm import SALE_REQUEST
 from ..core.payloads import MAX_LINES, MAX_QTY, clean_note
 from ..core.promotions import Context, Line, evaluate
 from ..core.returns import SoldRow, plan_return
-from . import access, audit, pins, realtime, register, requests
+from . import access, audit, customers, pins, realtime, register, requests
 
 
 class OfflinePolicyError(frappe.ValidationError):
@@ -76,8 +76,10 @@ def _resolve_customer(profile, customer: str | None) -> str:
 	if customer:
 		if not frappe.db.exists("Customer", customer):
 			frappe.throw(_("Unknown customer"))
-		if not frappe.has_permission("Customer", "read", customer):
-			frappe.throw(_("You cannot sell to this customer."), frappe.PermissionError)
+		# The POS Profile's customer groups decide, as in ERPNext's POS; cashiers rarely have Desk
+		# permissions on Customer, and those should not decide who a till may sell to.
+		if not customers.can_sell_to(profile, customer):
+			frappe.throw(_("This register cannot sell to customer {0}.").format(customer), frappe.PermissionError)
 		return customer
 	if not profile.customer:
 		frappe.throw(_("Set a default customer on POS Profile {0}.").format(profile.name))
