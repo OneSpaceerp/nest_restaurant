@@ -182,7 +182,9 @@ function back() {
 </template>
 
 <style>
-.n-login { min-block-size: 100dvh; display: grid; grid-template-columns: minmax(320px, 44%) 1fr; background: var(--surface-page); color: var(--text-body); }
+/* the standalone shell is a fixed, overflow-hidden frame, so the sign-in screen is its own scroll
+   container: on short phones the form and the shopper panel scroll instead of being cut off */
+.n-login { block-size: 100%; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: grid; grid-template-columns: minmax(320px, 44%) 1fr; background: var(--surface-page); color: var(--text-body); }
 .n-login__brand { position: relative; overflow: hidden; background: var(--login-brand); color: var(--nest-ink-900); display: grid; place-items: center; padding: var(--space-7); }
 .n-login--dark .n-login__brand { color: #fff; }
 /* receipt-tape dots: the till's own motif, quiet enough to sit behind the mark */
@@ -228,12 +230,13 @@ function back() {
 
 /* Phones and portrait tablets: brand band on top, form as a sheet rising over it */
 @media (max-width: 860px) {
-  .n-login { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  /* stacked blocks, not grid rows: a grid in a fixed-height scroller would shrink the header to fit */
+  .n-login { display: block; }
   .n-login__brand { padding: calc(var(--safe-top) + var(--space-7)) var(--space-5) calc(var(--space-7) + 24px); }
   .n-login__logo { inline-size: 72px; block-size: 72px; border-radius: 18px; }
   .n-login__app { font-size: var(--text-xl); margin-block-start: 0; }
   .n-login__site { display: none; }
-  .n-login__panel { place-items: start center; margin-block-start: -24px; border-start-start-radius: 24px; border-start-end-radius: 24px; background: var(--surface-page); padding: var(--space-6) var(--space-5) calc(var(--safe-bottom) + var(--space-7)); }
+  .n-login__panel { min-block-size: calc(100dvh - var(--safe-top) - 160px); place-items: start center; margin-block-start: -24px; border-start-start-radius: 24px; border-start-end-radius: 24px; background: var(--surface-page); padding: var(--space-6) var(--space-5) calc(var(--safe-bottom) + var(--space-7)); }
   .n-login__tools { position: fixed; inset-block-start: calc(var(--safe-top) + var(--space-3)); inset-inline-end: var(--space-3); z-index: 1; }
   .n-login__lang { background: rgb(255 255 255 / 0.85); border-color: transparent; color: var(--nest-ink-900); }
 }

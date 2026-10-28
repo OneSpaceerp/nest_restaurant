@@ -9,7 +9,7 @@
   "components/NConnection.vue": "2ebd5f95620bb113e8de71202b9551829e710437c97bd92cac6e5cc4b2da48ab",
   "components/NIcon.vue": "0cc093fbcd069916e0b84a72efa086d80aa6e5e90fc396d4900b76956d7b5498",
   "components/NInstall.vue": "ade1639d0a11388bdf3f5b3c33e0b9e2220ff972bec93bb8eb55b8dbcf026ef0",
-  "components/NLogin.vue": "ffe6f9550815efca8f9a62bab88a964b2cf6e05bf22ce3cd4f1c9acd30625264",
+  "components/NLogin.vue": "b9a17857913583172d814a46d408f4254430becaf8b036418d68d236e1a1f7f4",
   "components/NQty.vue": "d977472082870dad076c14e65c6e390d1a555db01441a933410051e74cd885a7",
   "components/NScanner.vue": "04ebfbd59943082dda693ecd3a7ff49fecf33f2d81da64caf5d4a8cb5ea65e94",
   "components/NSheet.vue": "9c074ec19f71df1e78333a6453e8514a01975025f07413c34529662034739dc0",
