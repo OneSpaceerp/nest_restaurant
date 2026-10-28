@@ -5,6 +5,7 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import NButton from '@shared/components/NButton.vue'
 import NQty from '@shared/components/NQty.vue'
 import NState from '@shared/components/NState.vue'
+import NInstall from '@shared/components/NInstall.vue'
 import NToasts from '@shared/components/NToasts.vue'
 import { call, newKey } from '@shared/lib/api'
 import { t } from '@shared/lib/i18n'
@@ -81,6 +82,7 @@ async function book() {
       </form>
     </section>
     <NToasts />
+    <NInstall app="nest_rest_guest" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png" />
   </div>
 </template>
 

@@ -184,7 +184,7 @@ def summary(session_name: str, include_expected: bool = True) -> dict:
 	payments = frappe.get_all(
 		"Sales Invoice Payment",
 		filters={"parenttype": dt, "parent": ["in", names]},
-		fields=["mode_of_payment", "sum(amount) as amount"],
+		fields=["mode_of_payment", {"SUM": "amount", "as": "amount"}],
 		group_by="mode_of_payment",
 	)
 	paid = {p.mode_of_payment: flt(p.amount) for p in payments}

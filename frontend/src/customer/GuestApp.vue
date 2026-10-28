@@ -6,6 +6,7 @@ import NQty from '@shared/components/NQty.vue'
 import NSheet from '@shared/components/NSheet.vue'
 import NState from '@shared/components/NState.vue'
 import NStatus from '@shared/components/NStatus.vue'
+import NInstall from '@shared/components/NInstall.vue'
 import NToasts from '@shared/components/NToasts.vue'
 import { toast } from '@shared/components/toast'
 import { ApiError, call, newKey } from '@shared/lib/api'
@@ -250,6 +251,7 @@ function lineState(l: { qty: number; sent_qty: number; progress: Record<string, 
       <template #actions><NButton variant="primary" size="lg" icon="send" :busy="sending" :disabled="!visit.cart.length" @click="send">{{ t('Send order') }}</NButton></template>
     </NSheet>
     <NToasts />
+    <NInstall app="nest_rest_guest" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png" />
   </div>
 </template>
 

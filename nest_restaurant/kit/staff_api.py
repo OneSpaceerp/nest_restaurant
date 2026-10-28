@@ -37,6 +37,8 @@ def bootstrap() -> dict:
 					for p in profile.payments
 				],
 				"default_customer": profile.customer,
+				"print_format": profile.print_format,
+				"letter_head": profile.letter_head,
 				"session": session.name if session else None,
 			}
 		)

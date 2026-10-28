@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import NConnection from '@shared/components/NConnection.vue'
 import NShell from '@shared/components/NShell.vue'
 import NState from '@shared/components/NState.vue'
+import NInstall from '@shared/components/NInstall.vue'
 import NToasts from '@shared/components/NToasts.vue'
 import { call } from '@shared/lib/api'
 import { t } from '@shared/lib/i18n'
@@ -89,6 +90,7 @@ async function logout() {
     <RouterView v-else />
   </NShell>
   <NToasts />
+  <NInstall v-if="!embedded" app="nest_restaurant" name="Nest Restaurant" logo="/assets/nest_restaurant/images/nest-restaurant-logo.png" />
 </template>
 
 <style>

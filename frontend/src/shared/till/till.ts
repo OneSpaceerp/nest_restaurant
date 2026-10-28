@@ -24,6 +24,17 @@ export interface RegisterInfo {
   default_customer: string
   session: string | null
   outlet_label?: string
+  print_format?: string | null
+  letter_head?: string | null
+}
+
+/** Desk print view for an invoice, using the POS Profile's print format and letter head when set. */
+export function receiptUrl(reg: RegisterInfo | null, doctype: string, name: string) {
+  const q = new URLSearchParams({ doctype, name, trigger_print: '1' })
+  if (reg?.print_format) q.set('format', reg.print_format)
+  if (reg?.letter_head) q.set('letterhead', reg.letter_head)
+  else q.set('no_letterhead', '0')
+  return `/printview?${q}`
 }
 export interface Boot {
   user: string

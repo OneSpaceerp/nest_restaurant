@@ -293,4 +293,11 @@ export default {
   'This browser cannot open the camera. Use the code field or a scanner.': 'لا يستطيع هذا المتصفح فتح الكاميرا. استخدم حقل الرمز أو قارئ الباركود.',
   'Camera access was blocked. Allow it in the browser settings, or type the code.': 'تم حظر الوصول إلى الكاميرا. اسمح به من إعدادات المتصفح، أو اكتب الرمز.',
   'The camera or barcode reader could not start. Type the code instead.': 'تعذّر تشغيل الكاميرا أو قارئ الباركود. اكتب الرمز بدلاً من ذلك.',
+  'Install {0}': 'ثبّت {0}',
+  'Add {0} to your home screen for full-screen use, a faster start and work offline.': 'أضف {0} إلى الشاشة الرئيسية لاستخدامه بملء الشاشة وتشغيل أسرع والعمل دون اتصال.',
+  'Tap the Share button in the browser bar.': 'اضغط زر المشاركة في شريط المتصفح.',
+  'Choose “Add to Home Screen”, then tap Add.': 'اختر «إضافة إلى الشاشة الرئيسية» ثم اضغط إضافة.',
+  'Not now': 'ليس الآن',
+  'Install': 'تثبيت',
+  'Got it': 'حسناً',
 } as Record<string, string>

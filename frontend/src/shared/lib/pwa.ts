@@ -48,6 +48,11 @@ window.addEventListener?.('beforeinstallprompt', (e) => {
   installAvailable.value = true
 })
 
+window.addEventListener?.('appinstalled', () => {
+  deferredInstall = null
+  installAvailable.value = false
+})
+
 export async function promptInstall() {
   if (!deferredInstall) return false
   await deferredInstall.prompt()
