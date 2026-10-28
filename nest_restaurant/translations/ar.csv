@@ -24,6 +24,7 @@ Enter a price above zero.,أدخل سعراً أكبر من صفر.
 Enter a valid email address.,أدخل بريداً إلكترونياً صحيحاً.
 Enter a valid mobile number.,أدخل رقم موبايل صحيحاً.
 Enter the customer's name.,أدخل اسم العميل.
+Enter your name.,أدخل اسمك.
 Every option needs a name.,كل اختيار يحتاج اسماً.
 Every section needs its own name.,كل قسم يحتاج اسماً مختلفاً.
 "Floor, kitchen and counter",الصالة والمطبخ والكاشير
@@ -37,6 +38,7 @@ Items already sent to the kitchen need a void reason.,الأصناف المرس�
 Kitchen,المطبخ
 Line not found,البند غير موجود
 Move or remove the dishes in {0} before removing the section.,انقل أصناف {0} أو أزلها قبل حذف القسم.
+New accounts can't be created here right now. Ask a member of staff.,لا يمكن إنشاء حسابات جديدة الآن. اسأل أحد الموظفين.
 "No kitchen station takes {0}. In Nest Restaurant → Stations, tick ""Catch-all station"" on one station or add a route for its item group.",لا توجد محطة مطبخ تستقبل {0}. من Nest Restaurant ← المحطات، فعّل «محطة لكل الأصناف» في محطة واحدة أو أضف توجيهاً لمجموعة الصنف.
 Only a billed check can be reopened.,يمكن إعادة فتح الحساب المطبوع فقط.
 Only open checks on the same register can be merged.,يمكن دمج الحسابات المفتوحة على نفس نقطة البيع فقط.
@@ -48,6 +50,7 @@ Quantity can't be negative.,لا يمكن أن تكون الكمية سالبة.
 Receipt,إيصال
 Receipt footer,تذييل الإيصال
 Receipt logo,شعار الإيصال
+Receipt not found.,الإيصال غير موجود.
 Refund total,إجمالي المرتجع
 Register,نقطة البيع
 Retail till for ERPNext,نقطة بيع للتجزئة على ERPNext
@@ -56,6 +59,7 @@ Rounding,التقريب
 "Scan, check prices, skip the wait",امسح، اعرف السعر، ووفّر وقت الانتظار
 Serial,الرقم التسلسلي
 Set a default Customer Group in Selling Settings (or on the POS Profile) to add customers at the till.,حدّد مجموعة عملاء افتراضية في إعدادات البيع (أو في ملف نقطة البيع) لإضافة عملاء من الكاشير.
+Sign in to your shopping account first.,سجّل الدخول إلى حساب التسوق أولاً.
 Some items haven't been sent to the kitchen yet.,بعض الأصناف لم تُرسل إلى المطبخ بعد.
 Someone else changed this check. Review the latest version and try again.,قام شخص آخر بتعديل هذا الحساب. راجع آخر نسخة وحاول مرة أخرى.
 Subtotal,المجموع الفرعي
@@ -69,17 +73,22 @@ Thank you for your visit,شكراً لزيارتكم
 That table belongs to another register.,هذه الطاولة تتبع نقطة بيع أخرى.
 That would remove items already paid for.,هذا سيحذف أصنافاً تم دفعها بالفعل.
 The group requires more choices than it has options.,المجموعة تطلب اختيارات أكثر من عدد خياراتها.
+The store hasn't finished setting up accounts. Ask a member of staff.,لم يكتمل إعداد الحسابات في المتجر بعد. اسأل أحد الموظفين.
 There is already a floor called {0}.,توجد صالة باسم {0} بالفعل.
 There is already a section called {0}.,يوجد قسم باسم {0} بالفعل.
 There is already a table {0} on this floor.,توجد طاولة {0} في هذه الصالة بالفعل.
+There is already an account for this email. Sign in instead.,يوجد حساب بهذا البريد الإلكتروني. سجّل الدخول بدلاً من ذلك.
 There is already an option group called {0}. Pick it from the list instead.,توجد مجموعة اختيارات باسم {0}. اخترها من القائمة بدلاً من ذلك.
 This cannot be changed here.,لا يمكن تغيير هذا هنا.
 This check can't be edited while {0}.,لا يمكن تعديل هذا الحساب وهو {0}.
 This check is {0}; reopen it to add items.,هذا الحساب {0}؛ أعد فتحه لإضافة أصناف.
 This dish belongs to another register.,هذا الصنف يتبع نقطة بيع أخرى.
 This floor is on another register.,هذه الصالة تتبع نقطة بيع أخرى.
+"This password is too easy to guess. Add words, numbers or symbols.",كلمة المرور سهلة التخمين. أضف كلمات أو أرقاماً أو رموزاً.
 Time,الوقت
+Too many accounts were created in the last hour. Try again later.,تم إنشاء حسابات كثيرة خلال الساعة الماضية. حاول لاحقاً.
 Total,الإجمالي
 Unknown service type,نوع خدمة غير معروف
+Use at least 8 characters for your password.,استخدم 8 أحرف على الأقل لكلمة المرور.
 {0} items · quantity {1},{0} أصناف · الكمية {1}
 {0}: choose between {1} and {2}.,{0}: اختر بين {1} و{2}.

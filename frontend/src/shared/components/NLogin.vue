@@ -17,6 +17,8 @@ const props = defineProps<{
   root: HTMLElement
   /** brand panel colour; text colour follows its lightness */
   brand: string
+  /** optional door for shoppers (e.g. Nest Shop accounts), shown under the staff form */
+  shopper?: { href: string; signupHref: string }
 }>()
 
 const userKey = computed(() => `${props.app}:last-user`)
@@ -160,6 +162,18 @@ function back() {
           <button v-if="step === 'otp'" type="button" class="n-login__link" @click="back">{{ t('Back') }}</button>
           <a v-else class="n-login__link" href="/login#forgot">{{ t('Forgot password?') }}</a>
         </p>
+
+        <aside v-if="shopper && step === 'password'" class="n-login__shopper" :aria-label="t('For shoppers')">
+          <span class="n-login__shopper-icon" aria-hidden="true"><NIcon name="basket" :size="22" /></span>
+          <span class="n-login__shopper-text">
+            <strong>{{ t('Shopping with us?') }}</strong>
+            <span>{{ t('Scan prices, build your basket and keep your receipts.') }}</span>
+          </span>
+          <span class="n-login__shopper-actions">
+            <a class="n-login__shopper-primary" :href="shopper.signupHref">{{ t('Create account') }}</a>
+            <a class="n-login__shopper-secondary" :href="shopper.href">{{ t('Shopper sign in') }}</a>
+          </span>
+        </aside>
       </form>
 
       <p class="n-login__by">nsdLabs</p>
@@ -198,6 +212,14 @@ function back() {
 .n-login__note--danger { background: var(--danger-bg); color: var(--danger-fg); }
 .n-login__links { text-align: center; }
 .n-login__link { background: none; border: 0; padding: var(--space-2); font: inherit; font-size: var(--text-sm); color: var(--text-body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-block-size: var(--touch); }
+.n-login__shopper { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); padding: var(--space-4); margin-block-start: var(--space-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); background: var(--surface-card); }
+.n-login__shopper-icon { inline-size: 44px; block-size: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--brand-fill); color: var(--brand-on-fill); }
+.n-login__shopper-text { display: grid; gap: 2px; font-size: var(--text-sm); color: var(--text-muted); }
+.n-login__shopper-text strong { font-size: var(--text-md); color: var(--text-strong); }
+.n-login__shopper-actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.n-login__shopper-actions a { min-block-size: var(--touch); display: grid; place-items: center; border-radius: var(--radius-md); font-weight: 700; text-decoration: none; text-align: center; padding-inline: var(--space-2); }
+.n-login__shopper-primary { background: var(--brand-fill); color: var(--brand-on-fill); }
+.n-login__shopper-secondary { border: 1px solid var(--border-strong); color: var(--text-strong); }
 .n-login__by { position: absolute; inset-block-end: var(--space-4); font-size: var(--text-xs); letter-spacing: 0.06em; color: var(--text-muted); }
 
 @keyframes n-login-rise { from { opacity: 0; transform: translateY(14px) scale(0.92); } }
