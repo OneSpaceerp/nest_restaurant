@@ -10,6 +10,9 @@ let deferredInstall: (Event & { prompt(): Promise<void> }) | null = null
 
 export async function registerWorker(swUrl: string, scope: string) {
   if (!('serviceWorker' in navigator) || !window.isSecureContext) return null
+  // a first install claims the page too (clients.claim), which fires controllerchange; only an
+  // update — a worker replacing one that already controlled this page — should reload
+  const hadController = Boolean(navigator.serviceWorker.controller)
   const reg = await navigator.serviceWorker.register(swUrl, { scope })
   const track = (w: ServiceWorker | null) => {
     if (!w) return
@@ -27,7 +30,7 @@ export async function registerWorker(swUrl: string, scope: string) {
   reg.addEventListener('updatefound', () => track(reg.installing))
   let reloading = false
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloading) return
+    if (reloading || !hadController) return
     reloading = true
     location.reload()
   })

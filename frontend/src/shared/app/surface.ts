@@ -63,15 +63,24 @@ export function cycleTheme(app: string, root: HTMLElement) {
   root.dataset.theme = prefs.theme
 }
 
-/** Fade out the launch splash (src/build/splash.mjs) once the app has mounted. It stays at least
- *  `minMs` from navigation start so a fast load doesn't flash it, and waits briefly for fonts so the
- *  first frame under it is already in the right typeface. */
-export function dismissSplash(minMs = 700) {
+/** Fade out the launch splash (src/build/splash.mjs) once the app has mounted. The first launch in a
+ *  session plays the whole sequence (rise, scan sweep, name; ~2.2 s from navigation start); reloads
+ *  in the same session (e.g. right after signing in) keep it short. It also waits briefly for fonts
+ *  so the first frame under it is already in the right typeface. */
+export function dismissSplash(minMs?: number) {
   const el = document.getElementById('nest-splash')
   if (!el) return
+  if (minMs === undefined) {
+    let seen = false
+    try {
+      seen = sessionStorage.getItem('nest:splash-seen') === '1'
+      sessionStorage.setItem('nest:splash-seen', '1')
+    } catch { /* private mode: treat as first launch */ }
+    minMs = seen ? 900 : 2200
+  }
   const fonts = document.fonts?.ready ?? Promise.resolve()
   const fontWait = Promise.race([fonts, new Promise((r) => setTimeout(r, 800))])
-  const minWait = new Promise((r) => setTimeout(r, Math.max(0, minMs - performance.now())))
+  const minWait = new Promise((r) => setTimeout(r, Math.max(0, (minMs ?? 0) - performance.now())))
   void Promise.all([fontWait, minWait]).then(() => {
     el.classList.add('is-done')
     setTimeout(() => el.remove(), 400)
