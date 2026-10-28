@@ -28,10 +28,12 @@ export interface RegisterInfo {
   letter_head?: string | null
 }
 
-/** Desk print view for an invoice, using the POS Profile's print format and letter head when set. */
-export function receiptUrl(reg: RegisterInfo | null, doctype: string, name: string) {
+/** Desk print view for an invoice: the POS Profile's print format and letter head when set, otherwise the
+ *  app's own receipt format (`fallbackFormat`, e.g. "Nest POS Receipt"). */
+export function receiptUrl(reg: RegisterInfo | null, doctype: string, name: string, fallbackFormat?: string) {
   const q = new URLSearchParams({ doctype, name, trigger_print: '1' })
-  if (reg?.print_format) q.set('format', reg.print_format)
+  const format = reg?.print_format || fallbackFormat
+  if (format) q.set('format', format)
   if (reg?.letter_head) q.set('letterhead', reg.letter_head)
   else q.set('no_letterhead', '0')
   return `/printview?${q}`

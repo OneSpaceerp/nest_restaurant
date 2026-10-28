@@ -6,7 +6,7 @@
   "audit.py": "0c54708210cff651ac7aa61e994e3686c83bc7e181bf71ba56deaf63acff09e5",
   "boot.py": "6405f1d7fc26b6a508ba62a396e2eb7fe6d251bbad4d54c8446d0cad8799d3e3",
   "catalog.py": "3196aec23a4af8965ed8d884714f9f84fb2edf5e29819cbf7aceb7cd7442b09a",
-  "controllers.py": "83ef1d35cb6a9fe09ceabbf4fa840a3638f9b3a7c51fa9d3c398f552cd10d91d",
+  "controllers.py": "769aa49afbd213af6172eaf830c46b2a35761031fde769dfe0012b0993642c82",
   "install.py": "2191b8764bc729d24d798118bf7aa74b596ab3b7e1f89e0b27ac95b5af7bf09d",
   "invoicing.py": "e7c244e65234c80742b204a713bda31c00d620248a744be73d18ecfd93744cd7",
   "pins.py": "a9c7c3b99a556ac7b61a27145eacf8e4f0ebd0e02e353fe0735f84c47c72d2da",

@@ -20,7 +20,9 @@
   "cb_security",
   "signing_secret",
   "sb_receipts",
+  "receipt_logo",
   "receipt_footer",
+  "cb_receipts",
   "public_receipt_links",
   "receipt_link_hours",
   "sb_restaurant",
@@ -137,9 +139,20 @@
    "label": "Receipts"
   },
   {
+   "fieldname": "receipt_logo",
+   "fieldtype": "Attach Image",
+   "label": "Receipt logo",
+   "description": "Printed at the top of the Nest Restaurant Receipt print format. A wide PNG or SVG on a white or transparent background prints best on thermal paper. Leave empty to use the company logo."
+  },
+  {
    "fieldname": "receipt_footer",
    "fieldtype": "Small Text",
-   "label": "Receipt footer"
+   "label": "Receipt footer",
+   "description": "Printed under the totals, e.g. return policy or a thank-you line. Line breaks are kept."
+  },
+  {
+   "fieldname": "cb_receipts",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "public_receipt_links",

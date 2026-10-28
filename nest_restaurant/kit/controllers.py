@@ -19,6 +19,20 @@ class SettingsController(Document):
 			self.signing_secret = new_token(48)
 		if cint(self.offline_max_hours) < 0 or cint(self.offline_max_hours) > 72:
 			frappe.throw(_("Offline sales can be allowed for 0 to 72 hours."))
+		self._publish_receipt_logo()
+
+	def _publish_receipt_logo(self):
+		"""Every cashier prints the receipt, but only managers can read Settings: a private logo would
+		print as a broken image, so the file is made public when it is set."""
+		if not (self.receipt_logo or "").startswith("/private/"):
+			return
+		name = frappe.db.get_value("File", {"file_url": self.receipt_logo, "is_private": 1}, "name")
+		if not name:
+			return
+		file = frappe.get_doc("File", name)
+		file.is_private = 0
+		file.save(ignore_permissions=True)
+		self.receipt_logo = file.file_url
 
 
 class RegisterController(Document):
