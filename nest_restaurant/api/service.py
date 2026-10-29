@@ -123,6 +123,11 @@ def cancel_order(order: str, reason: str, request_key: str, approval=None) -> di
 
 
 @frappe.whitelist()
+def pay_quote(order: str, register_name: str, part, customer: str | None = None, service_charge_percent: float | None = None, tip: float = 0) -> dict:
+	return settle.quote(order, register_name, obj(part, {}), customer, service_charge_percent, tip)
+
+
+@frappe.whitelist()
 def remaining(order: str) -> dict:
 	return settle.remaining(order)
 

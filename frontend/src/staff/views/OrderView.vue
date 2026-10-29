@@ -182,15 +182,53 @@ const partDue = computed(() => {
   return o.lines.reduce((a, l) => a + (part.value.selection[l.line_id] ?? 0) * l.rate_preview, 0)
 })
 
+// the real total for the part being paid, from ERPNext (taxes, service charge, priced options);
+// the menu-price sum above is only a preview and is never what the cashier collects
+interface PayQuote { amount_due: number; net_total: number; taxes: { description: string; amount: number }[]; service_charge: number; service_charge_percent: number; discount: number }
+const payQuote = ref<PayQuote | null>(null)
+const quoting = ref(false)
+let quoteSeq = 0
+let quoteTimer = 0
+const partArg = () => {
+  const p = part.value
+  return p.mode === 'all' ? { mode: 'all' } : p.mode === 'seat' ? { mode: 'seat', seat: p.seat, label: t('Seat {0}', p.seat ?? '') } : { mode: 'items', selection: p.selection }
+}
+watch([paying, part], () => {
+  clearTimeout(quoteTimer)
+  if (!paying.value) return void (payQuote.value = null)
+  quoting.value = true
+  quoteTimer = window.setTimeout(async () => {
+    const seq = ++quoteSeq
+    try {
+      const q = await call<PayQuote>(SVC('pay_quote'), { order: props.name, register_name: till.registerName.value, part: partArg() }, { method: 'GET' })
+      if (seq === quoteSeq) payQuote.value = q
+      payError.value = ''
+    } catch (e) {
+      if (seq === quoteSeq) { payQuote.value = null; payError.value = (e as Error).message }
+    } finally {
+      if (seq === quoteSeq) quoting.value = false
+    }
+  }, 200)
+}, { deep: true })
+const payDue = computed(() => payQuote.value?.amount_due ?? partDue.value)
+const payBreakdown = computed(() => {
+  const q = payQuote.value
+  if (!q) return []
+  const rows = [{ label: t('Subtotal'), amount: q.net_total - q.service_charge }]
+  if (q.service_charge) rows.push({ label: t('Service charge ({0}%)', q.service_charge_percent), amount: q.service_charge })
+  if (q.discount) rows.push({ label: t('Discount'), amount: -q.discount })
+  for (const x of q.taxes) if (x.amount) rows.push({ label: x.description, amount: x.amount })
+  return rows
+})
+
 async function pay(tenders: { mode_of_payment: string; amount: string }[]) {
   busy.value = 'pay'
   payError.value = ''
   try {
-    const p = part.value
     const res = await call<{ order: Order; invoice: { name: string } }>(SVC('pay'), {
       order: props.name,
       register_name: till.registerName.value,
-      part: p.mode === 'all' ? { mode: 'all' } : p.mode === 'seat' ? { mode: 'seat', seat: p.seat, label: t('Seat {0}', p.seat ?? '') } : { mode: 'items', selection: p.selection },
+      part: partArg(),
       tenders,
       request_key: newKey('pay-'),
     }, { timeoutMs: 45000 })
@@ -320,7 +358,8 @@ async function cancelOrder() {
         </div>
 
         <footer class="ord__foot">
-          <p class="ord__total"><span>{{ t('To pay') }}</span><strong class="num">{{ money(remaining + draftTotal, currency) }}</strong></p>
+          <!-- menu prices only: taxes, service charge and priced options are added by ERPNext at payment -->
+          <p class="ord__total"><span>{{ t('Subtotal') }}</span><strong class="num">{{ money(remaining + draftTotal, currency) }}</strong></p>
           <div class="ord__actions">
             <NButton v-if="draft.lines.length" :busy="busy === 'save'" @click="submitRound(false)">{{ t('Save') }}</NButton>
             <NButton variant="primary" size="lg" icon="send" :busy="busy === 'send'" :disabled="!draft.lines.length && !unsent" @click="submitRound(true)">
@@ -392,7 +431,7 @@ async function cancelOrder() {
         </div>
       </NSheet>
 
-      <PaySheet :open="paying" :due="partDue" :currency="currency" :modes="till.register.value?.payment_modes ?? []" :online="till.online.value" :busy="busy === 'pay'" :error="payError" @close="paying = false" @pay="pay">
+      <PaySheet :open="paying" :due="payDue" :pending="quoting" :breakdown="payBreakdown" :currency="currency" :modes="till.register.value?.payment_modes ?? []" :online="till.online.value" :busy="busy === 'pay'" :error="payError" @close="paying = false" @pay="pay">
         <template #part>
           <div class="ord__seg" role="radiogroup" :aria-label="t('What is being paid')">
             <button type="button" role="radio" class="ord__segb" :aria-checked="part.mode === 'all'" @click="part = { mode: 'all', seat: null, selection: {} }">{{ t('Everything left') }}</button>

@@ -73,6 +73,7 @@ Thank you for your visit,شكراً لزيارتكم
 That table belongs to another register.,هذه الطاولة تتبع نقطة بيع أخرى.
 That would remove items already paid for.,هذا سيحذف أصنافاً تم دفعها بالفعل.
 The group requires more choices than it has options.,المجموعة تطلب اختيارات أكثر من عدد خياراتها.
+The payment ({0}) is less than the total ({1}).,المبلغ المدفوع ({0}) أقل من الإجمالي ({1}).
 The store hasn't finished setting up accounts. Ask a member of staff.,لم يكتمل إعداد الحسابات في المتجر بعد. اسأل أحد الموظفين.
 There is already a floor called {0}.,توجد صالة باسم {0} بالفعل.
 There is already a section called {0}.,يوجد قسم باسم {0} بالفعل.

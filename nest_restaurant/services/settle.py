@@ -54,14 +54,10 @@ def _portions(doc, part: dict) -> list[dict]:
 	frappe.throw(_("Unknown split"))
 
 
-def settle(name: str, register_name: str, part: dict, tenders: list, request_key: str, customer: str | None = None,
-	service_charge_percent: float | None = None, tip: float = 0) -> dict:
-	access.require("cashier", "supervisor", "manager")
-	doc = orders._locked_order(name)
-	if doc.register != register_name:
-		frappe.throw(_("This check belongs to another register."), frappe.PermissionError)
-	if doc.status not in ("Open", "Bill Requested", "Billed", "Partly Paid"):
-		frappe.throw(_("This check can't be paid while {0}.").format(_(doc.status).lower()))
+def _payload(doc, part: dict, tenders: list | None, customer: str | None, service_charge_percent: float | None, tip: float):
+	"""The invoice payload for one payment of a check: the chosen portions, their priced options, the
+	service charge and the tip. Shared by the pre-payment quote and the payment itself, so the amount
+	shown to the cashier is exactly the amount ERPNext will invoice."""
 	unsent = [l.item_name for l in doc.lines if flt(l.sent_qty) < flt(l.qty) and not l.held]
 	if unsent and doc.service_type == "Dine-in":
 		frappe.throw(_("Send these to the kitchen before payment: {0}").format(", ".join(unsent)))
@@ -76,7 +72,7 @@ def settle(name: str, register_name: str, part: dict, tenders: list, request_key
 				lines.append({"line_id": f"{l.line_id}:{m['code']}", "item_code": m["price_item"], "qty": str(p["qty"])})
 	settings = _settings()
 	pct = flt(service_charge_percent if service_charge_percent is not None else settings.default_service_charge_percent)
-	payload = {"lines": lines, "customer": customer, "tenders": tenders, "note": _("Table {0}").format(doc.table or doc.order_number)}
+	payload = {"lines": lines, "customer": customer, "tenders": tenders or [], "note": _("Table {0}").format(doc.table or doc.order_number)}
 	if pct and settings.service_charge_item:
 		base = sum(D(l["qty"]) * D(by_id[l["line_id"]].rate_preview) for l in lines if ":" not in l["line_id"])
 		amount = splitting.service_charge(base, pct)
@@ -85,6 +81,19 @@ def settle(name: str, register_name: str, part: dict, tenders: list, request_key
 		if not settings.tip_item:
 			frappe.throw(_("Set a tip item in Nest Restaurant Settings to record tips."))
 		payload["lines"].append({"line_id": "tip", "item_code": settings.tip_item, "qty": "1", "rate_override": str(flt(tip))})
+	return payload, portions, by_id, pct
+
+
+def settle(name: str, register_name: str, part: dict, tenders: list, request_key: str, customer: str | None = None,
+	service_charge_percent: float | None = None, tip: float = 0) -> dict:
+	access.require("cashier", "supervisor", "manager")
+	doc = orders._locked_order(name)
+	if doc.register != register_name:
+		frappe.throw(_("This check belongs to another register."), frappe.PermissionError)
+	if doc.status not in ("Open", "Bill Requested", "Billed", "Partly Paid"):
+		frappe.throw(_("This check can't be paid while {0}.").format(_(doc.status).lower()))
+	payload, portions, by_id, pct = _payload(doc, part, tenders, customer, service_charge_percent, tip)
+	settings = _settings()
 	result = _submit_with_policy_lines(register_name, payload, request_key, doc)
 	if result.get("status") != "posted":
 		return result
@@ -112,6 +121,31 @@ def settle(name: str, register_name: str, part: dict, tenders: list, request_key
 	audit.log("order.settle", ORDER, doc.name, register=register_name, invoice=invoice["name"], part=part)
 	realtime.to_register(register_name, "paid", {"order": doc.name, "status": doc.status})
 	return {**result, "order": orders.view(name)}
+
+
+def quote(name: str, register_name: str, part: dict, customer: str | None = None, service_charge_percent: float | None = None, tip: float = 0) -> dict:
+	"""What this payment will really cost: ERPNext builds the invoice (prices, taxes, service charge,
+	priced options) without saving it."""
+	access.require("cashier", "supervisor", "manager")
+	doc = frappe.get_doc(ORDER, name)
+	if doc.register != register_name:
+		frappe.throw(_("This check belongs to another register."), frappe.PermissionError)
+	payload, _portions_, by_id, pct = _payload(doc, part, None, customer, service_charge_percent, tip)
+	frappe.flags.nest_policy_lines = {"service", "tip"}
+	try:
+		q = invoicing.quote(register_name, payload)
+	finally:
+		frappe.flags.nest_policy_lines = None
+	service = sum(flt(l["amount"]) for l in q["lines"] if l["item_code"] == _settings().service_charge_item) if pct else 0
+	return {
+		"amount_due": flt(q["amount_due"]),
+		"net_total": flt(q["net_total"]),
+		"taxes": q["taxes"],
+		"service_charge": service,
+		"service_charge_percent": pct,
+		"discount": flt(q["discount_amount"]),
+		"currency": q["currency"],
+	}
 
 
 def _submit_with_policy_lines(register_name: str, payload: dict, request_key: str, order_doc) -> dict:

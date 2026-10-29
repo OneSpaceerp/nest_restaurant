@@ -9,7 +9,9 @@ import { Dec } from '../lib/decimal'
 import { money, t } from '../lib/i18n'
 import type { PaymentMode } from './till'
 
-const props = defineProps<{ open: boolean; due: number; currency: string; modes: PaymentMode[]; online: boolean; busy: boolean; error: string }>()
+// pending: the server is still working out the real total (taxes, charges), so payment waits for it;
+// breakdown: optional lines shown under the amount due (subtotal, service charge, taxes)
+const props = defineProps<{ open: boolean; due: number; currency: string; modes: PaymentMode[]; online: boolean; busy: boolean; error: string; pending?: boolean; breakdown?: { label: string; amount: number }[] }>()
 const emit = defineEmits<{ close: []; pay: [{ mode_of_payment: string; amount: string }[]] }>()
 
 const rows = ref<{ mode: string; amount: string }[]>([])
@@ -20,12 +22,20 @@ watch(
     if (o) rows.value = [{ mode: props.modes.find((m) => m.default)?.mode_of_payment ?? props.modes[0]?.mode_of_payment ?? '', amount: Dec.of(props.due).toFixed(2) }]
   },
 )
+// when the total changes while the sheet is open (part chosen, server total arrives), a single
+// untouched payment row follows it
+watch(
+  () => props.due,
+  (now, before) => {
+    if (props.open && rows.value.length === 1 && Dec.of(rows.value[0].amount || 0).cmp(before ?? 0) === 0) rows.value[0].amount = Dec.of(now).toFixed(2)
+  },
+)
 
 const paid = computed(() => rows.value.reduce((a, r) => a.plus(r.amount || 0), Dec.zero))
 const remaining = computed(() => Dec.of(props.due).minus(paid.value))
 const nonCashOver = computed(() => rows.value.filter((r) => r.mode !== cashMode.value).reduce((a, r) => a.plus(r.amount || 0), Dec.zero).gt(props.due))
 const change = computed(() => (remaining.value.lt(0) ? remaining.value.neg() : Dec.zero))
-const canPay = computed(() => !props.busy && remaining.value.lte(0) && !nonCashOver.value && rows.value.every((r) => r.mode))
+const canPay = computed(() => !props.busy && !props.pending && remaining.value.lte(0) && !nonCashOver.value && rows.value.every((r) => r.mode))
 
 function quick(): number[] {
   const due = props.due
@@ -51,9 +61,12 @@ function submit() {
   <NSheet :open="open" :title="t('Take payment')" :dismissible="!busy" @close="emit('close')">
     <div class="pay">
       <slot name="part" />
-      <div class="pay__due">
-        <span>{{ t('Amount due') }}</span>
+      <div :class="['pay__due', { 'pay__due--pending': pending }]">
+        <span>{{ pending ? t('Checking the total…') : t('Amount due') }}</span>
         <strong class="num">{{ money(due, currency) }}</strong>
+        <dl v-if="breakdown?.length && !pending" class="pay__break">
+          <div v-for="(b, i) in breakdown" :key="i"><dt>{{ b.label }}</dt><dd class="num">{{ money(b.amount, currency) }}</dd></div>
+        </dl>
       </div>
       <p v-if="!online" class="pay__offline" role="status"><NIcon name="offline" :size="18" />{{ t('Offline: cash only. The sale is kept on this device and posted when the connection returns.') }}</p>
 
@@ -89,7 +102,11 @@ function submit() {
 
 <style>
 .pay { display: grid; gap: var(--space-4); }
-.pay__due { display: flex; justify-content: space-between; align-items: baseline; background: var(--brand-fill); color: var(--brand-on-fill); padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); }
+.pay__due { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 var(--space-3); background: var(--brand-fill); color: var(--brand-on-fill); padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); }
+.pay__due--pending strong { opacity: 0.45; }
+.pay__break { flex-basis: 100%; margin: var(--space-2) 0 0; padding-block-start: var(--space-2); border-block-start: 1px dashed currentColor; display: grid; gap: 2px; font-size: var(--text-sm); }
+.pay__break div { display: flex; justify-content: space-between; }
+.pay__break dd { margin: 0; }
 .pay__due strong { font-size: var(--text-2xl); }
 .pay__offline { display: flex; gap: var(--space-2); align-items: flex-start; background: var(--warn-bg); color: var(--warn-fg); padding: var(--space-3); border-radius: var(--radius-md); }
 .pay__quick { display: flex; gap: var(--space-2); flex-wrap: wrap; }

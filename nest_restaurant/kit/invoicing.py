@@ -260,7 +260,11 @@ def _apply_tenders(doc, tenders: list[dict], allow_on_account: bool) -> dict:
 	due = doc.rounded_total or doc.grand_total
 	settled = money.settle_tenders(due, normalized, doc.precision("grand_total"))
 	if settled["outstanding"] > 0 and not allow_on_account:
-		frappe.throw(_("The payment doesn't cover the total."), title=_("Payment short"))
+		fmt = lambda v: frappe.utils.fmt_money(v, currency=doc.currency)  # noqa: E731
+		frappe.throw(
+			_("The payment ({0}) is less than the total ({1}).").format(fmt(flt(due) - flt(settled["outstanding"])), fmt(due)),
+			title=_("Payment short"),
+		)
 	used = {r["mode"]: r["amount"] for r in settled["rows"]}
 	doc.set("payments", [p for p in doc.payments if p.mode_of_payment in used])
 	for p in doc.payments:
